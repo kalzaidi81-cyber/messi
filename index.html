@@ -1,9 +1,94 @@
-<b>📡 | حالة البث المباشر</b>
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Status Widget</title>
+    <style>
+        body {
+            background-color: #050505;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            font-family: 'Courier New', Courier, monospace;
+        }
 
-سيتم استئناف البث فور عودة المباريات. شاكرين لكم تفهمكم وحسن صبركم.
+        .terminal-widget {
+            background: #0d0d0d;
+            border: 1px solid #00f2ff;
+            border-radius: 8px;
+            width: 90%;
+            max-width: 400px;
+            color: #00f2ff;
+            box-shadow: 0 0 15px rgba(0, 242, 255, 0.3);
+            overflow: hidden;
+        }
 
-<i>اللهم صلِّ وسلم على نبينا محمد ﷺ</i>
+        .terminal-header {
+            background: #1a1a1a;
+            padding: 10px;
+            display: flex;
+            align-items: center;
+            border-bottom: 1px solid #00f2ff;
+        }
 
-━━━━━━━━━━━━━━
-✈️ <b>قناة الأسطورة ليو ميسي</b>
-<a href="https://t.me/messi_1">اضغط هنا للانضمام والمتابعة</a>
+        .dot { height: 10px; width: 10px; border-radius: 50%; margin-left: 5px; }
+        .red { background: #ff5f56; }
+        .yellow { background: #ffbd2e; }
+        .green { background: #27c93f; }
+        .title { margin-right: 10px; font-size: 12px; opacity: 0.7; }
+
+        .terminal-body { padding: 20px; }
+        .status-line { font-weight: bold; margin: 10px 0; }
+        .offline { color: #ff5f56; text-shadow: 0 0 5px #ff5f56; }
+        .msg-line { margin: 5px 0; }
+
+        .msg-line::after {
+            content: '_';
+            animation: blink 1s infinite;
+        }
+
+        @keyframes blink {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0; }
+        }
+
+        .join-link {
+            display: block;
+            margin-top: 20px;
+            color: #fff;
+            text-decoration: none;
+            border: 1px solid #fff;
+            padding: 10px;
+            text-align: center;
+            transition: 0.3s;
+        }
+
+        .join-link:hover {
+            background: #fff;
+            color: #000;
+        }
+    </style>
+</head>
+<body>
+
+<div class="terminal-widget">
+    <div class="terminal-header">
+        <span class="dot red"></span>
+        <span class="dot yellow"></span>
+        <span class="dot green"></span>
+        <span class="title">SYSTEM_STATUS_CONTROL.exe</span>
+    </div>
+    <div class="terminal-body">
+        <p class="status-line">>> STATUS: <span class="offline">OFFLINE</span></p>
+        <p class="msg-line">>> NOTICE: ننتظر صافرة بداية المباريات...</p>
+        <p class="msg-line">>> اللهم صلِّ وسلم على نبينا محمد ﷺ</p>
+        <br>
+        <a href="https://t.me/messi_1" class="join-link">>> JOIN_NETWORK: قناة الأسطورة ليو ميسي</a>
+    </div>
+</div>
+
+</body>
+</html>
