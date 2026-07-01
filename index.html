@@ -2,61 +2,55 @@
 <html lang="ar" dir="rtl">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>بث الأسطورة - التغطية المباشرة</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Messi TV | البث الحصري</title>
     <link href="https://vjs.zencdn.net/8.10.0/video-js.css" rel="stylesheet" />
     <style>
-        body { margin: 0; background-color: #000; font-family: 'Segoe UI', sans-serif; color: gold; display: flex; flex-direction: column; height: 100vh; }
-        .header { text-align: center; padding: 15px; border-bottom: 2px solid gold; background: #111; }
-        .video-container { position: relative; width: 100%; flex-grow: 1; display: flex; align-items: center; justify-content: center; }
+        :root { --gold: #D4AF37; --dark: #0a0a0a; }
+        body { margin: 0; background: #000; color: #fff; font-family: 'Cairo', sans-serif; }
         
-        /* تصميم السيرفرات */
-        .server-list { display: flex; justify-content: center; gap: 10px; padding: 15px; background: #000; }
-        .server-btn { 
-            padding: 10px 20px; background: #222; border: 1px solid gold; 
-            color: gold; cursor: pointer; border-radius: 5px; font-weight: bold; 
-        }
-        .server-btn:hover, .server-btn.active { background: gold; color: black; }
+        /* الهيدر الاحترافي */
+        .navbar { padding: 20px; text-align: center; border-bottom: 1px solid var(--gold); background: linear-gradient(to bottom, #111, #000); }
+        .navbar h1 { margin: 0; color: var(--gold); letter-spacing: 2px; text-transform: uppercase; }
 
-        #play-overlay {
-            position: absolute; top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(0,0,0,0.95); z-index: 999;
-            display: flex; flex-direction: column; align-items: center; justify-content: center;
-        }
+        /* منطقة الفيديو */
+        .video-wrapper { width: 95%; max-width: 900px; margin: 20px auto; border: 2px solid var(--gold); border-radius: 15px; overflow: hidden; box-shadow: 0 0 30px rgba(212, 175, 55, 0.3); }
+        
+        /* قائمة السيرفرات الأنيقة */
+        .server-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(120px, 1fr)); gap: 10px; padding: 20px; max-width: 900px; margin: 0 auto; }
+        .btn-server { padding: 15px; background: #1a1a1a; border: 1px solid #333; color: #fff; border-radius: 8px; cursor: pointer; transition: 0.4s; font-weight: bold; }
+        .btn-server:hover { border-color: var(--gold); background: #222; }
+        .btn-server.active { background: var(--gold); color: #000; }
+
+        /* تذييل الصفحة */
+        .footer { text-align: center; padding: 30px; font-size: 0.9em; opacity: 0.7; }
     </style>
 </head>
 <body>
 
-    <div class="header"><h1>البث المباشر للأسطورة</h1></div>
+    <div class="navbar"><h1>Messi Legend TV</h1></div>
 
-    <div class="video-container">
-        <div id="play-overlay">
-            <button id="start-btn" style="padding: 20px 50px; font-size: 24px; background: gold; border: none; border-radius: 50px; cursor: pointer;">اضغط للبدء</button>
-        </div>
-        <video id="my-video" class="video-js vjs-big-play-centered" playsinline muted controls width="100%" height="100%"></video>
+    <div class="video-wrapper" id="player-box">
+        <video id="my-video" class="video-js vjs-big-play-centered" playsinline muted controls width="100%" height="450px"></video>
     </div>
 
-    <div class="server-list">
-        <button class="server-btn active" onclick="changeSource('https://am.kooran60.cfd/poole1.m3u8', this)">سيرفر 1</button>
-        <button class="server-btn" onclick="changeSource('رابط_سيرفر_2_هنا', this)">سيرفر 2</button>
-        <button class="server-btn" onclick="changeSource('رابط_سيرفر_3_هنا', this)">سيرفر 3</button>
+    <div class="server-grid">
+        <button class="btn-server active" onclick="loadStream('https://am.kooran60.cfd/poole1.m3u8', this)">سيرفر 1 (HD)</button>
+        <button class="btn-server" onclick="loadStream('رابط_سيرفر_2', this)">سيرفر 2 (SD)</button>
+        <button class="btn-server" onclick="loadStream('رابط_سيرفر_3', this)">سيرفر 3 (Lite)</button>
     </div>
+
+    <div class="footer">جميع الحقوق محفوظة لمحبي الأسطورة 2026</div>
 
     <script src="https://vjs.zencdn.net/8.10.0/video.min.js"></script>
     <script>
         var player = videojs('my-video');
-        
-        function changeSource(url, btn) {
+        function loadStream(url, btn) {
             player.src({ src: url, type: 'application/x-mpegURL' });
             player.play();
-            document.querySelectorAll('.server-btn').forEach(b => b.classList.remove('active'));
+            document.querySelectorAll('.btn-server').forEach(b => b.classList.remove('active'));
             btn.classList.add('active');
         }
-
-        document.getElementById('start-btn').addEventListener('click', function() {
-            document.getElementById('play-overlay').style.display = 'none';
-            player.play();
-        });
     </script>
 </body>
 </html>
