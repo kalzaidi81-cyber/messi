@@ -3,23 +3,141 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>البث المباشر - الأسطورة</title>
+    <title>بث الأسطورة ليو ميسي</title>
+    <!-- مكتبة Hls.js لتشغيل البث بسلاسة -->
     <script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
+    <!-- خط تجول الاحترافي من جوجل -->
+    <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;700&display=swap" rel="stylesheet">
     <style>
-        body { margin: 0; background: #000; display: flex; justify-content: center; align-items: center; height: 100vh; color: white; font-family: sans-serif; }
-        .container { width: 100%; max-width: 800px; text-align: center; }
-        video { width: 100%; border-radius: 8px; background: black; }
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+        body {
+            font-family: 'Tajawal', sans-serif;
+            background: linear-gradient(135deg, #070f18 0%, #0d1b2a 50%, #15273b 100%);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            color: #ffffff;
+            overflow-x: hidden;
+            position: relative;
+        }
+        /* تأثيرات الإضاءة الخلفية للتصميم الزجاجي */
+        body::before, body::after {
+            content: '';
+            position: absolute;
+            width: 350px;
+            height: 350px;
+            border-radius: 50%;
+            z-index: 1;
+            filter: blur(100px);
+            opacity: 0.3;
+            pointer-events: none;
+        }
+        body::before {
+            background: #74c0fc; /* اللون السماوي */
+            top: 15%;
+            left: 5%;
+        }
+        body::after {
+            background: #ffd43b; /* اللون الذهبي */
+            bottom: 15%;
+            right: 5%;
+        }
+        /* البطاقة الزجاجية الرئيسية */
+        .glass-container {
+            position: relative;
+            z-index: 2;
+            width: 92%;
+            max-width: 850px;
+            padding: 30px;
+            background: rgba(255, 255, 255, 0.03);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border-radius: 28px;
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            box-shadow: 0 15px 35px 0 rgba(0, 0, 0, 0.5);
+            text-align: center;
+            transition: all 0.3s ease;
+        }
+        h1 {
+            font-size: 1.8rem;
+            font-weight: 700;
+            margin-bottom: 25px;
+            background: linear-gradient(45deg, #74c0fc, #ffffff, #ffd43b);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            text-shadow: 0 4px 12px rgba(0,0,0,0.3);
+        }
+        /* إطار مشغل الفيديو الاحترافي */
+        .video-wrapper {
+            position: relative;
+            border-radius: 18px;
+            overflow: hidden;
+            border: 1px solid rgba(255, 255, 255, 0.12);
+            box-shadow: 0 12px 40px rgba(0,0,0,0.7);
+            background: #000000;
+        }
+        video {
+            width: 100%;
+            display: block;
+            aspect-ratio: 16/9;
+        }
+        /* التذييل الفخم */
+        .footer-area {
+            margin-top: 30px;
+            border-top: 1px solid rgba(255, 255, 255, 0.05);
+            padding-top: 20px;
+        }
+        .footer-title {
+            font-size: 1.2rem;
+            font-weight: 700;
+            color: #ffffff;
+            text-shadow: 0 2px 4px rgba(0,0,0,0.5);
+        }
+        .channel-username {
+            display: inline-block;
+            margin-top: 10px;
+            padding: 6px 18px;
+            background: rgba(116, 192, 252, 0.1);
+            border: 1px solid rgba(116, 192, 252, 0.25);
+            border-radius: 50px;
+            color: #74c0fc;
+            text-decoration: none;
+            font-size: 0.95rem;
+            font-weight: bold;
+            transition: all 0.3s ease;
+        }
+        .channel-username:hover {
+            background: rgba(116, 192, 252, 0.2);
+            box-shadow: 0 0 15px rgba(116, 192, 252, 0.4);
+            transform: translateY(-2px);
+        }
     </style>
 </head>
 <body>
 
-    <div class="container">
-        <video id="video" controls autoplay playsinline></video>
-        <p style="margin-top: 15px;">مشاهدة ممتعة لمباريات الأرجنتين! 🇦🇷</p>
+    <div class="glass-container">
+        <h1>شاهد البث المباشر المباشر بدقة عالية ⚽</h1>
+        
+        <div class="video-wrapper">
+            <video id="video" controls autoplay playsinline></video>
+        </div>
+
+        <div class="footer-area">
+            <div class="footer-title">قناة الأسطورة ليو ميسي</div>
+            <!-- يمكنك تعديل يوزر القناة أدناه ليطابق يوزرك الحقيقي -->
+            <a href="https://t.me/leomessi" target="_blank" class="channel-username">@leomessi</a>
+        </div>
     </div>
 
     <script>
         var video = document.getElementById('video');
+        // تم الحفاظ على رابط البث الخاص بك تماماً دون أي تغيير
         var videoSrc = 'https://sh.kooraa36.cfd/endroom1.m3u8';
         
         if (Hls.isSupported()) {
