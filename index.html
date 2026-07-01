@@ -2,49 +2,194 @@
 <html lang="ar" dir="rtl">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Messi TV | البث الحصري</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>بث قناة الأسطورة ليو ميسي</title>
+    
     <link href="https://vjs.zencdn.net/8.10.0/video-js.css" rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;700;900&display=swap" rel="stylesheet">
+    
     <style>
-        :root { --gold: #D4AF37; --dark: #0a0a0a; }
-        body { margin: 0; background: #000; color: #fff; font-family: 'Cairo', sans-serif; }
+        :root { 
+            --gold: #D4AF37; 
+            --dark: #0a0a0a; 
+            --darker: #050505;
+        }
+        body { 
+            margin: 0; 
+            background: var(--darker); 
+            color: #fff; 
+            font-family: 'Cairo', sans-serif; 
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
         
-        /* الهيدر الاحترافي */
-        .navbar { padding: 20px; text-align: center; border-bottom: 1px solid var(--gold); background: linear-gradient(to bottom, #111, #000); }
-        .navbar h1 { margin: 0; color: var(--gold); letter-spacing: 2px; text-transform: uppercase; }
+        /* الهيدر الاحترافي مع نبض "مباشر" */
+        .navbar { 
+            padding: 15px 20px; 
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid rgba(212, 175, 55, 0.3); 
+            background: linear-gradient(to bottom, #1a1a1a, #000); 
+        }
+        .navbar h1 { 
+            margin: 0; 
+            font-size: 22px;
+            color: var(--gold); 
+            font-weight: 900;
+        }
+        .live-badge {
+            background: #e74c3c;
+            color: white;
+            padding: 5px 15px;
+            border-radius: 20px;
+            font-weight: 700;
+            font-size: 14px;
+            animation: pulseRed 1.5s infinite;
+        }
+        @keyframes pulseRed {
+            0% { box-shadow: 0 0 5px #e74c3c; }
+            50% { box-shadow: 0 0 20px #e74c3c; }
+            100% { box-shadow: 0 0 5px #e74c3c; }
+        }
 
         /* منطقة الفيديو */
-        .video-wrapper { width: 95%; max-width: 900px; margin: 20px auto; border: 2px solid var(--gold); border-radius: 15px; overflow: hidden; box-shadow: 0 0 30px rgba(212, 175, 55, 0.3); }
+        .video-wrapper { 
+            width: 95%; 
+            max-width: 900px; 
+            margin: 25px auto; 
+            border: 1px solid rgba(212, 175, 55, 0.4); 
+            border-radius: 12px; 
+            overflow: hidden; 
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.9), 0 0 15px rgba(212, 175, 55, 0.15); 
+            background: #000;
+        }
         
-        /* قائمة السيرفرات الأنيقة */
-        .server-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(120px, 1fr)); gap: 10px; padding: 20px; max-width: 900px; margin: 0 auto; }
-        .btn-server { padding: 15px; background: #1a1a1a; border: 1px solid #333; color: #fff; border-radius: 8px; cursor: pointer; transition: 0.4s; font-weight: bold; }
-        .btn-server:hover { border-color: var(--gold); background: #222; }
-        .btn-server.active { background: var(--gold); color: #000; }
+        /* السيرفرات بتصميم زجاجي */
+        .servers-container {
+            max-width: 900px;
+            margin: 0 auto 20px;
+            width: 95%;
+        }
+        .server-grid { 
+            display: flex; 
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 10px; 
+        }
+        .btn-server { 
+            flex: 1;
+            min-width: 100px;
+            max-width: 150px;
+            padding: 10px; 
+            background: rgba(26, 26, 26, 0.8); 
+            border: 1px solid #333; 
+            color: #ddd; 
+            border-radius: 8px; 
+            cursor: pointer; 
+            transition: all 0.3s ease; 
+            font-weight: 700; 
+            font-family: 'Cairo', sans-serif;
+        }
+        .btn-server:hover { 
+            border-color: var(--gold); 
+            color: #fff;
+            transform: translateY(-2px);
+        }
+        .btn-server.active { 
+            background: linear-gradient(135deg, var(--gold), #b8860b); 
+            color: #000; 
+            border: none;
+            box-shadow: 0 5px 15px rgba(212, 175, 55, 0.4);
+        }
 
-        /* تذييل الصفحة */
-        .footer { text-align: center; padding: 30px; font-size: 0.9em; opacity: 0.7; }
+        /* الفوتر الفخم (الطلبات الجديدة) */
+        .pro-footer {
+            margin-top: auto;
+            background: linear-gradient(to top, #050505, #111);
+            border-top: 1px solid rgba(212, 175, 55, 0.2);
+            padding: 35px 20px;
+            text-align: center;
+            border-radius: 30px 30px 0 0;
+            box-shadow: 0 -5px 20px rgba(0,0,0,0.5);
+        }
+        .pro-footer .channel-name {
+            color: var(--gold);
+            font-size: 20px;
+            font-weight: 900;
+            margin: 0 0 20px 0;
+            text-shadow: 0 2px 5px rgba(0,0,0,0.5);
+        }
+        .pro-footer .telegram-link {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            background: #2AABEE;
+            color: #fff;
+            padding: 12px 30px;
+            border-radius: 50px;
+            text-decoration: none;
+            font-weight: 700;
+            font-size: 16px;
+            transition: 0.3s;
+            margin-bottom: 25px;
+            box-shadow: 0 4px 15px rgba(42, 171, 238, 0.4);
+        }
+        .pro-footer .telegram-link:hover {
+            background: #229ddb;
+            transform: scale(1.05);
+        }
+        .pro-footer .pray-text {
+            color: #eee;
+            font-size: 18px;
+            font-weight: 700;
+        }
+        .pro-footer .pray-text span {
+            color: var(--gold);
+        }
     </style>
 </head>
 <body>
 
-    <div class="navbar"><h1>Messi Legend TV</h1></div>
-
-    <div class="video-wrapper" id="player-box">
-        <video id="my-video" class="video-js vjs-big-play-centered" playsinline muted controls width="100%" height="450px"></video>
+    <div class="navbar">
+        <h1>الأسطورة TV</h1>
+        <div class="live-badge">مباشر 🔴</div>
     </div>
 
-    <div class="server-grid">
-        <button class="btn-server active" onclick="loadStream('https://am.kooran60.cfd/poole1.m3u8', this)">سيرفر 1 (HD)</button>
-        <button class="btn-server" onclick="loadStream('رابط_سيرفر_2', this)">سيرفر 2 (SD)</button>
-        <button class="btn-server" onclick="loadStream('رابط_سيرفر_3', this)">سيرفر 3 (Lite)</button>
+    <div class="video-wrapper">
+        <video id="my-video" class="video-js vjs-big-play-centered" playsinline muted controls width="100%" height="250px"></video>
     </div>
 
-    <div class="footer">جميع الحقوق محفوظة لمحبي الأسطورة 2026</div>
+    <div class="servers-container">
+        <div class="server-grid">
+            <button class="btn-server active" onclick="loadStream('https://am.kooran60.cfd/poole1.m3u8', this)">سيرفر 1 (رئيسي)</button>
+            <button class="btn-server" onclick="loadStream('رابط_2_هنا', this)">سيرفر 2</button>
+            <button class="btn-server" onclick="loadStream('رابط_3_هنا', this)">سيرفر 3</button>
+        </div>
+    </div>
+
+    <div class="pro-footer">
+        <h3 class="channel-name">قناة الأسطورة ليو ميسي</h3>
+        
+        <a href="https://t.me/messi_1" target="_blank" class="telegram-link">
+            انضم إلينا على تيليجرام : messi_1@
+        </a>
+        
+        <div class="pray-text">
+            اللهم <span>صلِّ وسلِّم</span> على نبينا محمد ﷺ
+        </div>
+    </div>
 
     <script src="https://vjs.zencdn.net/8.10.0/video.min.js"></script>
     <script>
+        // تفعيل المشغل
         var player = videojs('my-video');
+        
+        // تشغيل السيرفر الأول تلقائياً عند الفتح
+        player.src({ src: 'https://am.kooran60.cfd/poole1.m3u8', type: 'application/x-mpegURL' });
+
+        // دالة تغيير السيرفرات
         function loadStream(url, btn) {
             player.src({ src: url, type: 'application/x-mpegURL' });
             player.play();
