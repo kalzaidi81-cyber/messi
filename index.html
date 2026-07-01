@@ -3,9 +3,11 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>بث قناة الأسطورة ليو ميسي</title>
+    <title>قناة الأسطورة ليو ميسي | بث مباشر</title>
     
+    <!-- مكتبة مشغل الفيديو -->
     <link href="https://vjs.zencdn.net/8.10.0/video-js.css" rel="stylesheet" />
+    <!-- خط عربي احترافي (Cairo) -->
     <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;700;900&display=swap" rel="stylesheet">
     
     <style>
@@ -104,7 +106,7 @@
             box-shadow: 0 5px 15px rgba(212, 175, 55, 0.4);
         }
 
-        /* الفوتر الفخم (الطلبات الجديدة) */
+        /* الفوتر الفخم */
         .pro-footer {
             margin-top: auto;
             background: linear-gradient(to top, #050505, #111);
@@ -116,7 +118,7 @@
         }
         .pro-footer .channel-name {
             color: var(--gold);
-            font-size: 20px;
+            font-size: 22px;
             font-weight: 900;
             margin: 0 0 20px 0;
             text-shadow: 0 2px 5px rgba(0,0,0,0.5);
@@ -152,41 +154,48 @@
 </head>
 <body>
 
+    <!-- الشريط العلوي -->
     <div class="navbar">
         <h1>الأسطورة TV</h1>
         <div class="live-badge">مباشر 🔴</div>
     </div>
 
+    <!-- المشغل -->
     <div class="video-wrapper">
         <video id="my-video" class="video-js vjs-big-play-centered" playsinline muted controls width="100%" height="250px"></video>
     </div>
 
+    <!-- أزرار السيرفرات -->
     <div class="servers-container">
         <div class="server-grid">
-            <button class="btn-server active" onclick="loadStream('https://am.kooran60.cfd/poole1.m3u8', this)">سيرفر 1 (رئيسي)</button>
+            <button class="btn-server active" onclick="loadStream('https://am.kooran60.cfd/poole1.m3u8', this)">البث الرئيسي</button>
             <button class="btn-server" onclick="loadStream('رابط_2_هنا', this)">سيرفر 2</button>
             <button class="btn-server" onclick="loadStream('رابط_3_هنا', this)">سيرفر 3</button>
         </div>
     </div>
 
+    <!-- الفوتر الاحترافي المخصص -->
     <div class="pro-footer">
         <h3 class="channel-name">قناة الأسطورة ليو ميسي</h3>
         
+        <!-- زر التيليجرام -->
         <a href="https://t.me/messi_1" target="_blank" class="telegram-link">
-            انضم إلينا على تيليجرام : messi_1@
+            تيليجرام : messi_1@
         </a>
         
+        <!-- الصلاة على النبي -->
         <div class="pray-text">
             اللهم <span>صلِّ وسلِّم</span> على نبينا محمد ﷺ
         </div>
     </div>
 
+    <!-- سكريبتات المشغل -->
     <script src="https://vjs.zencdn.net/8.10.0/video.min.js"></script>
     <script>
         // تفعيل المشغل
         var player = videojs('my-video');
         
-        // تشغيل السيرفر الأول تلقائياً عند الفتح
+        // تشغيل البث الرئيسي تلقائياً
         player.src({ src: 'https://am.kooran60.cfd/poole1.m3u8', type: 'application/x-mpegURL' });
 
         // دالة تغيير السيرفرات
