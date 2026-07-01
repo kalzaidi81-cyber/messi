@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Status Widget</title>
+    <title>تنبيه الأسطورة</title>
     <style>
         body {
             background-color: #050505;
@@ -12,7 +12,7 @@
             align-items: center;
             height: 100vh;
             margin: 0;
-            font-family: 'Courier New', Courier, monospace;
+            font-family: 'Tahoma', 'Arial', sans-serif;
         }
 
         .terminal-widget {
@@ -20,7 +20,7 @@
             border: 1px solid #00f2ff;
             border-radius: 8px;
             width: 90%;
-            max-width: 400px;
+            max-width: 450px;
             color: #00f2ff;
             box-shadow: 0 0 15px rgba(0, 242, 255, 0.3);
             overflow: hidden;
@@ -38,32 +38,23 @@
         .red { background: #ff5f56; }
         .yellow { background: #ffbd2e; }
         .green { background: #27c93f; }
-        .title { margin-right: 10px; font-size: 12px; opacity: 0.7; }
+        .title { margin-right: 10px; font-size: 14px; font-weight: bold; }
 
-        .terminal-body { padding: 20px; }
-        .status-line { font-weight: bold; margin: 10px 0; }
+        .terminal-body { padding: 25px; }
+        .status-line { font-weight: bold; margin: 10px 0; font-size: 1.1em; }
         .offline { color: #ff5f56; text-shadow: 0 0 5px #ff5f56; }
-        .msg-line { margin: 5px 0; }
-
-        .msg-line::after {
-            content: '_';
-            animation: blink 1s infinite;
-        }
-
-        @keyframes blink {
-            0%, 100% { opacity: 1; }
-            50% { opacity: 0; }
-        }
+        .msg-line { margin: 10px 0; line-height: 1.6; }
 
         .join-link {
             display: block;
-            margin-top: 20px;
+            margin-top: 25px;
             color: #fff;
             text-decoration: none;
             border: 1px solid #fff;
-            padding: 10px;
+            padding: 12px;
             text-align: center;
             transition: 0.3s;
+            font-weight: bold;
         }
 
         .join-link:hover {
@@ -79,14 +70,14 @@
         <span class="dot red"></span>
         <span class="dot yellow"></span>
         <span class="dot green"></span>
-        <span class="title">SYSTEM_STATUS_CONTROL.exe</span>
+        <span class="title">نظام الحالة</span>
     </div>
     <div class="terminal-body">
-        <p class="status-line">>> STATUS: <span class="offline">OFFLINE</span></p>
-        <p class="msg-line">>> NOTICE: ننتظر صافرة بداية المباريات...</p>
+        <p class="status-line">>> الحالة: <span class="offline">خارج الخدمة</span></p>
+        <p class="msg-line">>> تنبيه: سنعود لكم فور انطلاق المباريات.</p>
         <p class="msg-line">>> اللهم صلِّ وسلم على نبينا محمد ﷺ</p>
         <br>
-        <a href="https://t.me/messi_1" class="join-link">>> JOIN_NETWORK: قناة الأسطورة ليو ميسي</a>
+        <a href="https://t.me/messi_1" class="join-link">✈️ انضموا لقناة الأسطورة ليو ميسي @messi_1</a>
     </div>
 </div>
 
