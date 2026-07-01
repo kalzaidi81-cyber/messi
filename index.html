@@ -2,172 +2,40 @@
 <html lang="ar" dir="rtl">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>قناة الأسطورة ليو ميسي | بث مباشر</title>
-    
-    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;700;900&display=swap" rel="stylesheet">
-    
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>البث المباشر - الأسطورة</title>
+    <script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
     <style>
-        :root { 
-            --gold: #D4AF37; 
-            --dark: #0a0a0a; 
-            --darker: #050505;
-        }
-        body { 
-            margin: 0; 
-            background: var(--darker); 
-            color: #fff; 
-            font-family: 'Cairo', sans-serif; 
-            display: flex;
-            flex-direction: column;
-            min-height: 100vh;
-        }
-        
-        /* الهيدر الاحترافي */
-        .navbar { 
-            padding: 15px 20px; 
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            border-bottom: 1px solid rgba(212, 175, 55, 0.3); 
-            background: linear-gradient(to bottom, #1a1a1a, #000); 
-        }
-        .navbar h1 { 
-            margin: 0; 
-            font-size: 22px;
-            color: var(--gold); 
-            font-weight: 900;
-        }
-        .live-badge {
-            background: #e74c3c;
-            color: white;
-            padding: 5px 15px;
-            border-radius: 20px;
-            font-weight: 700;
-            font-size: 14px;
-            animation: pulseRed 1.5s infinite;
-        }
-        @keyframes pulseRed {
-            0% { box-shadow: 0 0 5px #e74c3c; }
-            50% { box-shadow: 0 0 20px #e74c3c; }
-            100% { box-shadow: 0 0 5px #e74c3c; }
-        }
-
-        /* منطقة الفيديو */
-        .video-wrapper { 
-            width: 95%; 
-            max-width: 900px; 
-            margin: 25px auto; 
-            border: 1px solid rgba(212, 175, 55, 0.4); 
-            border-radius: 12px; 
-            overflow: hidden; 
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.9), 0 0 15px rgba(212, 175, 55, 0.15); 
-            background: #000;
-        }
-        video {
-            width: 100%;
-            height: auto;
-            max-height: 500px;
-            display: block;
-            outline: none;
-        }
-        
-        /* السيرفرات بتصميم زجاجي */
-        .servers-container {
-            max-width: 900px;
-            margin: 0 auto 20px;
-            width: 95%;
-        }
-        .server-grid { 
-            display: flex; 
-            flex-wrap: wrap;
-            justify-content: center;
-            gap: 10px; 
-        }
-        .btn-server { 
-            flex: 1;
-            min-width: 100px;
-            max-width: 150px;
-            padding: 10px; 
-            background: rgba(26, 26, 26, 0.8); 
-            border: 1px solid #333; 
-            color: #ddd; 
-            border-radius: 8px; 
-            cursor: pointer; 
-            transition: all 0.3s ease; 
-            font-weight: 700; 
-            font-family: 'Cairo', sans-serif;
-        }
-        .btn-server:hover { 
-            border-color: var(--gold); 
-            color: #fff;
-            transform: translateY(-2px);
-        }
-        .btn-server.active { 
-            background: linear-gradient(135deg, var(--gold), #b8860b); 
-            color: #000; 
-            border: none;
-            box-shadow: 0 5px 15px rgba(212, 175, 55, 0.4);
-        }
-
-        /* الفوتر الفخم */
-        .pro-footer {
-            margin-top: auto;
-            background: linear-gradient(to top, #050505, #111);
-            border-top: 1px solid rgba(212, 175, 55, 0.2);
-            padding: 35px 20px;
-            text-align: center;
-            border-radius: 30px 30px 0 0;
-            box-shadow: 0 -5px 20px rgba(0,0,0,0.5);
-        }
-        .pro-footer .channel-name {
-            color: var(--gold);
-            font-size: 22px;
-            font-weight: 900;
-            margin: 0 0 20px 0;
-            text-shadow: 0 2px 5px rgba(0,0,0,0.5);
-        }
-        .pro-footer .telegram-link {
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            background: #2AABEE;
-            color: #fff;
-            padding: 12px 30px;
-            border-radius: 50px;
-            text-decoration: none;
-            font-weight: 700;
-            font-size: 16px;
-            transition: 0.3s;
-            margin-bottom: 25px;
-            box-shadow: 0 4px 15px rgba(42, 171, 238, 0.4);
-        }
-        .pro-footer .telegram-link:hover {
-            background: #229ddb;
-            transform: scale(1.05);
-        }
-        .pro-footer .pray-text {
-            color: #eee;
-            font-size: 18px;
-            font-weight: 700;
-        }
-        .pro-footer .pray-text span {
-            color: var(--gold);
-        }
+        body { margin: 0; background: #000; display: flex; justify-content: center; align-items: center; height: 100vh; color: white; font-family: sans-serif; }
+        .container { width: 100%; max-width: 800px; text-align: center; }
+        video { width: 100%; border-radius: 8px; background: black; }
     </style>
 </head>
 <body>
 
-    <div class="navbar">
-        <h1>الأسطورة TV</h1>
-        <div class="live-badge">مباشر 🔴</div>
+    <div class="container">
+        <video id="video" controls autoplay playsinline></video>
+        <p style="margin-top: 15px;">مشاهدة ممتعة لمباريات الأرجنتين! 🇦🇷</p>
     </div>
 
-    <div class="video-wrapper">
-        <video id="video" controls autoplay muted playsinline></video>
-    </div>
-
-    <div class="servers-container">
-        <div class="server-grid">
-            <button class="btn-server active" onclick="loadStream('https://stm.linkip.org/live/1957_.m3u8', this)">البث الرئيسي</button>
-            <button class="btn-server
+    <script>
+        var video = document.getElementById('video');
+        var videoSrc = 'https://sh.kooraa36.cfd/endroom1.m3u8';
+        
+        if (Hls.isSupported()) {
+            var hls = new Hls();
+            hls.loadSource(videoSrc);
+            hls.attachMedia(video);
+            hls.on(Hls.Events.MANIFEST_PARSED, function() {
+                video.play();
+            });
+        }
+        else if (video.canPlayType('application/vnd.apple.mpegurl')) {
+            video.src = videoSrc;
+            video.addEventListener('loadedmetadata', function() {
+                video.play();
+            });
+        }
+    </script>
+</body>
+</html>
