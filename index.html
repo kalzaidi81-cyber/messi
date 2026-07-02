@@ -1,3 +1,5 @@
+
+
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
@@ -5,12 +7,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>بث الأسطورة ليو ميسي المباشر</title>
     
-    <!-- خط Cairo الفخم -->
+    <!-- خط Cairo الاحترافي -->
     <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;700;900&display=swap" rel="stylesheet">
     
-    <!-- مشغل وصوتيات Plyr الحديث لدعم التكبير الإجباري -->
-    <link rel="stylesheet" href="https://cdn.plyr.io/3.7.8/plyr.css" />
-    <script src="https://cdn.plyr.io/3.7.8/plyr.polyfilled.js"></script>
     <!-- مكتبة تشغيل البث HLS -->
     <script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
 
@@ -69,9 +68,9 @@
         .live-badge {
             display: flex;
             align-items: center;
-            background: rgba(255, 59, 48, 0.15);
-            border: 1px solid rgba(255, 59, 48, 0.3);
-            color: #ff3b30;
+            background: rgba(212, 175, 55, 0.15);
+            border: 1px solid rgba(212, 175, 55, 0.3);
+            color: #d4af37;
             padding: 8px 16px;
             border-radius: 50px;
             font-size: 0.9rem;
@@ -81,20 +80,19 @@
         .pulse-dot {
             width: 8px;
             height: 8px;
-            background: #ff3b30;
+            background: #d4af37;
             border-radius: 50%;
             margin-left: 8px;
-            box-shadow: 0 0 10px #ff3b30;
+            box-shadow: 0 0 10px #d4af37;
             animation: pulse 1.5s infinite;
         }
 
         @keyframes pulse {
-            0% { box-shadow: 0 0 0 0 rgba(255, 59, 48, 0.7); }
-            70% { box-shadow: 0 0 0 10px rgba(255, 59, 48, 0); }
-            100% { box-shadow: 0 0 0 0 rgba(255, 59, 48, 0); }
+            0% { box-shadow: 0 0 0 0 rgba(212, 175, 55, 0.7); }
+            70% { box-shadow: 0 0 0 10px rgba(212, 175, 55, 0); }
+            100% { box-shadow: 0 0 0 0 rgba(212, 175, 55, 0); }
         }
 
-        /* تعديل حاوية المشغل ليتوافق مع ألوان التصميم */
         .video-wrapper {
             width: 100%;
             background: #000;
@@ -102,44 +100,64 @@
             overflow: hidden;
             box-shadow: 0 15px 35px rgba(0,0,0,0.5);
             border: 1px solid rgba(255, 255, 255, 0.1);
-            --plyr-color-main: #229ED9; /* تلوين أزرار التحكم بألوان التليجرام */
+            aspect-ratio: 16 / 9; 
         }
 
         video {
             width: 100%;
+            height: 100%;
+            object-fit: contain;
             display: block;
         }
 
-        .actions {
+        /* أزرار التحكم والدعم السفلي */
+        .action-zone {
             display: flex;
-            justify-content: center;
-            margin-top: 25px;
+            flex-direction: column;
+            gap: 12px;
+            margin-top: 20px;
+            align-items: center;
         }
 
-        .refresh-btn {
-            background: rgba(255, 255, 255, 0.05);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            color: #fff;
-            padding: 12px 25px;
+        /* زر التشغيل الخارجي السحري لتخطي حظر السيرفرات */
+        .external-play-btn {
+            background: linear-gradient(135deg, #d4af37 0%, #aa841c 100%);
+            color: #000000;
+            border: none;
+            padding: 14px 28px;
             border-radius: 50px;
             font-family: inherit;
-            font-size: 1rem;
-            font-weight: 700;
+            font-size: 1.05rem;
+            font-weight: 900;
             cursor: pointer;
             transition: all 0.3s ease;
             display: flex;
             align-items: center;
+            justify-content: center;
             gap: 10px;
+            width: 100%;
+            max-width: 450px;
+            text-decoration: none;
+            box-shadow: 0 6px 20px rgba(212, 175, 55, 0.3);
         }
 
-        .refresh-btn:hover {
-            background: rgba(255, 255, 255, 0.1);
+        .external-play-btn:hover {
             transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(212, 175, 55, 0.5);
+        }
+
+        .notice-text {
+            font-size: 0.85rem;
+            color: #a0a0a0;
+            text-align: center;
+            margin: 0 10px;
         }
 
         .footer {
-            margin-top: 30px;
+            margin-top: 25px;
             text-align: center;
+            border-top: 1px solid rgba(255, 255, 255, 0.05);
+            padding-top: 20px;
         }
 
         .tg-btn {
@@ -149,9 +167,9 @@
             background: linear-gradient(135deg, #2AABEE 0%, #229ED9 100%);
             color: #ffffff;
             text-decoration: none;
-            padding: 14px 35px;
+            padding: 12px 30px;
             border-radius: 14px;
-            font-size: 1.1rem;
+            font-size: 1rem;
             font-weight: 700;
             transition: all 0.3s ease;
             box-shadow: 0 10px 20px rgba(42, 171, 238, 0.25);
@@ -166,18 +184,17 @@
         }
 
         .tg-btn svg {
-            width: 24px;
-            height: 24px;
+            width: 22px;
+            height: 22px;
             fill: #ffffff;
             margin-left: 10px;
         }
 
         .username {
             display: block;
-            margin-top: 12px;
-            color: #888;
-            font-size: 0.9rem;
-            letter-spacing: 1px;
+            margin-top: 10px;
+            color: #666;
+            font-size: 0.85rem;
         }
     </style>
 </head>
@@ -189,36 +206,40 @@
         <div class="header">
             <div class="title-wrapper">
                 <h1>بث الأسطورة ليو ميسي</h1>
-                <p>تغطية حصرية 🐐</p>
+                <p>تغطية حصرية للمباريات 🐐</p>
             </div>
-            <div class="live-badge" id="statusBadge">
+            <div class="live-badge">
                 <div class="pulse-dot"></div>
-                <span id="statusText">جاري الاتصال...</span>
+                <span>مباشر الآن</span>
             </div>
         </div>
 
-        <!-- مشغل الفيديو الاحترافي -->
+        <!-- مشغل الفيديو الذكي داخل المتصفح -->
         <div class="video-wrapper">
-            <video id="videoPlayer" controls crossorigin="anonymous" playsinline webkit-playsinline></video>
+            <video id="videoPlayer" controls autoplay playsinline webkit-playsinline></video>
         </div>
 
-        <!-- زر التحديث السريع بالسيرفر -->
-        <div class="actions">
-            <button class="refresh-btn" onclick="reloadStream()">
-                <span>إعادة تحميل المشغل</span>
-                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                    <path d="M21.5 2v6h-6M2.13 15.57a10 10 0 1 0 3.43-11.44l-4.14 4.14"/>
+        <!-- منطقة الدعم والأزرار لتخطي قيود السيرفر وتفعيل الصوت والتكبير الحتمي -->
+        <div class="action-zone">
+            
+            <!-- زر تشغيل خارجي فوري ومباشر -->
+            <a href="https://stm.linkip.org/live/1957_.m3u8" class="external-play-btn" target="_blank">
+                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+                    <polygon points="5 3 19 12 5 21 5 3"></polygon>
                 </svg>
-            </button>
+                اضغط هنا للتشغيل المباشر (يدعم التكبير والصوت)
+            </a>
+            
+            <p class="notice-text">💡 إذا لم يظهر الفيديو تلقائياً بسبب حماية السيرفر المصدر، اضغط على الزر الذهبي أعلاه ليفتح معك في مشغل الهاتف مباشرة بأعلى جودة وبدون قيود.</p>
         </div>
 
-        <!-- الفوتر واليوزر -->
+        <!-- الفوتر ورابط القناة -->
         <div class="footer">
             <a href="https://t.me/messi_1" target="_blank" class="tg-btn">
                 <svg viewBox="0 0 24 24">
                     <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm4.64 6.8c-.15 1.58-.8 5.42-1.13 7.19-.14.75-.42 1-.68 1.03-.58.05-1.02-.38-1.58-.75-.88-.58-1.38-.94-2.23-1.5-.99-.65-.35-1.01.22-1.59.15-.15 2.71-2.48 2.76-2.69a.2.2 0 00-.05-.18c-.06-.05-.14-.03-.21-.02-.09.02-1.49.95-4.22 2.79-.4.27-.76.41-1.08.4-.36-.01-1.04-.2-1.55-.37-.63-.2-1.12-.31-1.08-.66.02-.18.27-.36.74-.55 2.92-1.27 4.86-2.11 5.83-2.51 2.78-1.16 3.35-1.36 3.73-1.36.08 0 .27.02.39.12.1.08.13.19.14.27-.01.06.01.24 0 .24z"/>
                 </svg>
-                انضم لقناتكم في تيليجرام
+                انضم لقناتنا في تيليجرام
             </a>
             <span class="username">@messi_1</span>
         </div>
@@ -227,66 +248,32 @@
 
     <script>
         const video = document.getElementById('videoPlayer');
-        const videoSrc = 'https://stm.linkip.org/live/1957_.m3u8'; 
+        const videoSrc = 'https://stm.linkip.org/live/1957_.m3u8';
         let hls;
-        let player;
 
-        // تهيئة واجهة أزرار التحكم الاحترافية لـ Plyr لتفادي مشاكل تليجرام
-        player = new Plyr(video, {
-            controls: ['play-large', 'play', 'mute', 'volume', 'fullscreen'],
-            tooltips: { controls: false, seek: false }
-        });
-
-        function initStream() {
+        function startStream() {
             if (Hls.isSupported()) {
                 if (hls) { hls.destroy(); }
                 hls = new Hls({
-                    // إعدادات لتخطي حظر الـ CORS جزئياً وتسريع الاستجابة
-                    xhrSetup: function (xhr, url) {
-                        xhr.withCredentials = false;
-                    }
+                    maxBufferLength: 10,
+                    liveSyncDuration: 3,
+                    enableWorker: true
                 });
                 hls.loadSource(videoSrc);
                 hls.attachMedia(video);
                 hls.on(Hls.Events.MANIFEST_PARSED, function() {
-                    document.getElementById('statusText').innerText = "مباشر";
                     video.play().catch(() => {});
-                });
-                
-                hls.on(Hls.Events.ERROR, function (event, data) {
-                    if (data.fatal) {
-                        handleErrorUI();
-                    }
                 });
             }
             else if (video.canPlayType('application/vnd.apple.mpegurl')) {
                 video.src = videoSrc;
                 video.addEventListener('loadedmetadata', function() {
-                    document.getElementById('statusText').innerText = "مباشر";
                     video.play();
                 });
             }
         }
 
-        function handleErrorUI() {
-            document.getElementById('statusText').innerText = "انقطع البث";
-            document.querySelector('.live-badge').style.background = "rgba(160, 160, 160, 0.2)";
-            document.querySelector('.live-badge').style.borderColor = "rgba(160, 160, 160, 0.3)";
-            document.querySelector('.live-badge').style.color = "#a0a0a0";
-            document.querySelector('.pulse-dot').style.display = "none";
-        }
-
-        function reloadStream() {
-            initStream();
-            document.getElementById('statusText').innerText = "جاري الاتصال...";
-            document.querySelector('.live-badge').style.background = "rgba(255, 59, 48, 0.15)";
-            document.querySelector('.live-badge').style.borderColor = "rgba(255, 59, 48, 0.3)";
-            document.querySelector('.live-badge').style.color = "#ff3b30";
-            document.querySelector('.pulse-dot').style.display = "block";
-        }
-
-        window.onload = initStream;
+        window.onload = startStream;
     </script>
 </body>
 </html>
-
