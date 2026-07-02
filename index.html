@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
@@ -28,10 +27,10 @@
         .premium-container {
             width: 100%;
             max-width: 900px;
-            background: rgba(255, 255, 255, 0.02);
+            background: rgba(255, 255, 255, 0.03);
             backdrop-filter: blur(20px);
             -webkit-backdrop-filter: blur(20px);
-            border: 1px solid rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.08);
             border-radius: 28px;
             padding: 20px;
             box-shadow: 0 40px 80px rgba(0, 0, 0, 0.8), inset 0 1px 1px rgba(255, 255, 255, 0.1);
@@ -43,7 +42,7 @@
             align-items: center;
             margin-bottom: 20px;
             padding-bottom: 15px;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.06);
         }
 
         .title-wrapper h1 {
@@ -108,58 +107,80 @@
             background-color: #000;
         }
 
-        /* الطبقة السحرية لتخطي قيود تليجرام */
-        .magic-overlay {
+        /* رسالة الخطأ لو السيرفر منع التشغيل في تليجرام */
+        #errorOverlay {
             position: absolute;
             top: 0; left: 0; right: 0; bottom: 0;
-            background: rgba(0, 0, 0, 0.7);
-            backdrop-filter: blur(5px);
-            -webkit-backdrop-filter: blur(5px);
-            display: flex;
+            background: rgba(0, 0, 0, 0.85);
+            display: none;
             flex-direction: column;
             justify-content: center;
             align-items: center;
-            cursor: pointer;
-            z-index: 10;
-            transition: opacity 0.3s ease;
+            text-align: center;
+            padding: 20px;
+            z-index: 20;
         }
 
-        .play-btn-smart {
-            width: 70px;
-            height: 70px;
-            background: linear-gradient(135deg, #2AABEE, #1a7eb3);
-            border-radius: 50%;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            box-shadow: 0 0 20px rgba(42, 171, 238, 0.6);
-            margin-bottom: 15px;
-            animation: float 2s ease-in-out infinite;
-        }
-
-        @keyframes float {
-            0%, 100% { transform: translateY(0px); }
-            50% { transform: translateY(-8px); }
-        }
-
-        .play-btn-smart svg {
-            width: 30px;
-            height: 30px;
-            fill: #fff;
-            margin-left: 5px;
-        }
-
-        .magic-overlay p {
+        #errorOverlay p {
+            color: #ff453a;
+            font-weight: 700;
             font-size: 1.1rem;
+            margin-bottom: 10px;
+        }
+
+        #errorOverlay span {
+            color: #aaa;
+            font-size: 0.9rem;
+        }
+
+        .action-zone {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            margin-top: 20px;
+            align-items: center;
+        }
+
+        /* الزر الذهبي للتشغيل الخارجي (مهم جداً لتخطي حظر تليجرام) */
+        .external-play-btn {
+            background: linear-gradient(135deg, #d4af37 0%, #aa841c 100%);
+            color: #000;
+            border: none;
+            padding: 16px 20px;
+            border-radius: 16px;
+            font-family: inherit;
+            font-size: 1.05rem;
             font-weight: 900;
-            color: #fff;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            width: 100%;
+            text-decoration: none;
+            box-shadow: 0 8px 25px rgba(212, 175, 55, 0.3);
+            text-align: center;
+        }
+
+        .external-play-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 12px 30px rgba(212, 175, 55, 0.5);
+        }
+
+        .notice-text {
+            font-size: 0.85rem;
+            color: #999;
+            text-align: center;
             margin: 0;
-            text-shadow: 0 2px 10px rgba(0,0,0,1);
+            line-height: 1.5;
         }
 
         .footer {
             margin-top: 25px;
             text-align: center;
+            border-top: 1px solid rgba(255, 255, 255, 0.05);
+            padding-top: 20px;
         }
 
         .tg-btn {
@@ -174,15 +195,9 @@
             font-size: 1.05rem;
             font-weight: 900;
             transition: all 0.3s ease;
-            box-shadow: 0 10px 20px rgba(42, 171, 238, 0.25);
             width: 100%;
             max-width: 350px;
             box-sizing: border-box;
-        }
-
-        .tg-btn:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 15px 25px rgba(42, 171, 238, 0.4);
         }
 
         .tg-btn svg {
@@ -217,17 +232,24 @@
         </div>
 
         <div class="video-wrapper">
-            <video id="videoPlayer" playsinline webkit-playsinline></video>
+            <video id="videoPlayer" controls playsinline webkit-playsinline></video>
             
-            <!-- طبقة التفاعل الإجباري لكسر حماية تليجرام -->
-            <div class="magic-overlay" id="smartOverlay">
-                <div class="play-btn-smart">
-                    <svg viewBox="0 0 24 24">
-                        <path d="M8 5v14l11-7z"/>
-                    </svg>
-                </div>
-                <p>اضغط هنا لتشغيل البث والصوت 🔊</p>
+            <div id="errorOverlay">
+                <p>⚠️ حماية السيرفر تمنع التشغيل هنا</p>
+                <span>الرجاء الضغط على الزر الذهبي بالأسفل للتشغيل الفوري</span>
             </div>
+        </div>
+
+        <div class="action-zone">
+            <!-- الزر المنقذ -->
+            <a href="https://stm.linkip.org/live/1957_.m3u8" class="external-play-btn" target="_blank">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+                    <polygon points="5 3 19 12 5 21 5 3"></polygon>
+                </svg>
+                سيرفر بديل (شاشة كاملة + تشغيل مضمون)
+            </a>
+            
+            <p class="notice-text">💡 إذا لم يعمل المشغل التلقائي، السيرفر البديل يعمل 100% وبأعلى جودة.</p>
         </div>
 
         <div class="footer">
@@ -244,41 +266,37 @@
 
     <script>
         const video = document.getElementById('videoPlayer');
-        const overlay = document.getElementById('smartOverlay');
+        const errorOverlay = document.getElementById('errorOverlay');
         const videoSrc = 'https://stm.linkip.org/live/1957_.m3u8';
-        let hls;
 
-        function setupStream() {
+        function startGuaranteedStream() {
             if (Hls.isSupported()) {
-                hls = new Hls({
-                    maxBufferLength: 5,
-                    liveSyncDuration: 2, // تأخير شبه معدوم
-                    enableWorker: true
+                const hls = new Hls({
+                    maxBufferLength: 10,
+                    liveSyncDuration: 3,
+                    enableWorker: true,
+                    lowLatencyMode: true
                 });
+                
                 hls.loadSource(videoSrc);
                 hls.attachMedia(video);
+                
+                // في حال حظر السيرفر، يتم تنبيه المستخدم للضغط على الزر
+                hls.on(Hls.Events.ERROR, function (event, data) {
+                    if (data.fatal) {
+                        errorOverlay.style.display = 'flex';
+                    }
+                });
+
             } else if (video.canPlayType('application/vnd.apple.mpegurl')) {
                 video.src = videoSrc;
+                video.addEventListener('error', function() {
+                    errorOverlay.style.display = 'flex';
+                });
             }
         }
 
-        // تفعيل الفيديو بمجرد ضغط المستخدم لتخطي الحظر
-        overlay.addEventListener('click', function() {
-            video.controls = true;
-            video.muted = false;
-            const playPromise = video.play();
-            
-            if (playPromise !== undefined) {
-                playPromise.then(() => {
-                    overlay.style.opacity = '0';
-                    setTimeout(() => { overlay.style.display = 'none'; }, 300);
-                }).catch(error => {
-                    console.log("Play failed:", error);
-                });
-            }
-        });
-
-        window.onload = setupStream;
+        window.onload = startGuaranteedStream;
     </script>
 </body>
 </html>
