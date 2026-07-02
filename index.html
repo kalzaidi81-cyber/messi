@@ -4,90 +4,194 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>بث الأسطورة ليو ميسي</title>
+    <!-- استدعاء خط Cairo الاحترافي من جوجل -->
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;700;900&display=swap" rel="stylesheet">
+    
     <style>
-        /* الأساسيات لملء الشاشة بالكامل */
+        /* إعدادات الشاشة الكاملة */
         body, html {
             margin: 0;
             padding: 0;
-            height: 100%;
             width: 100%;
-            background: radial-gradient(circle at center, #111 0%, #000 100%);
+            height: 100%;
+            background-color: #07090f; /* لون ليلي عميق جداً */
+            font-family: 'Cairo', sans-serif;
             display: flex;
             justify-content: center;
             align-items: center;
-            font-family: 'Segoe UI', Tahoma, sans-serif;
-            color: #fff;
+            overflow: hidden;
+            color: #ffffff;
         }
 
-        /* حاوية المحتوى الفخمة */
-        .full-screen-container {
-            width: 100%;
-            padding: 20px;
+        /* الإضاءات المتحركة في الخلفية */
+        .glow-blob {
+            position: absolute;
+            border-radius: 50%;
+            filter: blur(90px);
+            opacity: 0.6;
+            z-index: 0;
+            animation: float-blob 10s infinite alternate ease-in-out;
+        }
+        .blob-1 {
+            width: 400px;
+            height: 400px;
+            background: #0088cc; /* أزرق تليجرام */
+            top: -10%;
+            right: -10%;
+        }
+        .blob-2 {
+            width: 300px;
+            height: 300px;
+            background: #d4af37; /* ذهبي الأساطير */
+            bottom: -10%;
+            left: -10%;
+            animation-delay: -5s;
+        }
+
+        @keyframes float-blob {
+            0% { transform: translate(0, 0) scale(1); }
+            100% { transform: translate(-30px, 50px) scale(1.2); }
+        }
+
+        /* حاوية الزجاج الفاخرة (Glassmorphism) */
+        .glass-card {
+            position: relative;
+            z-index: 1;
+            background: rgba(255, 255, 255, 0.03);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 24px;
+            padding: 50px 30px;
+            width: 90%;
+            max-width: 500px;
             text-align: center;
-            max-width: 800px;
+            box-shadow: 0 30px 60px rgba(0, 0, 0, 0.5);
+            animation: card-entrance 1.2s cubic-bezier(0.2, 0.8, 0.2, 1);
         }
 
-        .status-title {
-            font-size: 2.5rem;
-            margin-bottom: 20px;
-            color: #00d4ff;
-            text-shadow: 0 0 15px rgba(0, 212, 255, 0.5);
+        @keyframes card-entrance {
+            from { opacity: 0; transform: translateY(30px); }
+            to { opacity: 1; transform: translateY(0); }
         }
 
-        .message {
-            font-size: 1.5rem;
-            margin: 10px 0;
-            font-weight: 300;
-        }
-
-        .prayer {
-            color: #888;
-            margin-top: 30px;
-            font-style: italic;
-        }
-
-        /* زر الانضمام الاحترافي */
-        .channel-btn {
-            display: inline-block;
-            margin-top: 50px;
-            padding: 20px 40px;
-            background: linear-gradient(135deg, #0088cc 0%, #00a8ff 100%);
-            color: white;
-            text-decoration: none;
+        /* شارة الحالة */
+        .status-badge {
+            display: inline-flex;
+            align-items: center;
+            background: rgba(255, 59, 48, 0.15);
+            border: 1px solid rgba(255, 59, 48, 0.3);
+            color: #ff3b30;
+            padding: 8px 16px;
             border-radius: 50px;
-            font-size: 1.3rem;
-            font-weight: bold;
-            box-shadow: 0 5px 20px rgba(0, 136, 204, 0.4);
-            transition: transform 0.3s ease;
+            font-size: 0.9rem;
+            font-weight: 700;
+            margin-bottom: 25px;
+        }
+        .status-dot {
+            width: 8px;
+            height: 8px;
+            background: #ff3b30;
+            border-radius: 50%;
+            margin-left: 8px;
+            box-shadow: 0 0 10px #ff3b30;
+            animation: pulse-dot 1.5s infinite;
         }
 
-        .channel-btn:hover {
-            transform: scale(1.05);
+        @keyframes pulse-dot {
+            0% { box-shadow: 0 0 0 0 rgba(255, 59, 48, 0.7); }
+            70% { box-shadow: 0 0 0 10px rgba(255, 59, 48, 0); }
+            100% { box-shadow: 0 0 0 0 rgba(255, 59, 48, 0); }
         }
 
-        /* رسالة اليوزر */
-        .username {
-            margin-top: 20px;
+        /* النصوص */
+        h1 {
+            font-size: 2.2rem;
+            font-weight: 900;
+            margin: 0 0 15px 0;
+            background: linear-gradient(to left, #ffffff, #d1d5db);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        .main-msg {
             font-size: 1.2rem;
-            color: #ccc;
+            color: #e5e7eb;
+            margin-bottom: 25px;
+            line-height: 1.6;
+        }
+        .prayer {
+            font-size: 0.95rem;
+            color: #9ca3af;
+            margin-bottom: 40px;
+            font-weight: 400;
+        }
+
+        /* زر تليجرام الفخم */
+        .tg-button {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: linear-gradient(135deg, #2AABEE 0%, #229ED9 100%);
+            color: #ffffff;
+            text-decoration: none;
+            padding: 16px 24px;
+            border-radius: 16px;
+            font-size: 1.1rem;
+            font-weight: 700;
+            transition: all 0.3s ease;
+            box-shadow: 0 10px 20px rgba(42, 171, 238, 0.3);
+        }
+        .tg-button:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 15px 25px rgba(42, 171, 238, 0.4);
+        }
+        
+        /* أيقونة تليجرام */
+        .tg-icon {
+            width: 24px;
+            height: 24px;
+            fill: #ffffff;
+            margin-left: 10px;
+        }
+
+        .username {
+            display: block;
+            margin-top: 15px;
+            font-size: 1rem;
+            color: #2AABEE;
+            font-weight: 700;
+            letter-spacing: 1px;
         }
     </style>
 </head>
 <body>
 
-    <div class="full-screen-container">
-        <h1 class="status-title">قناة الأسطورة ليو ميسي</h1>
-        
-        <p class="message">خارج الخدمة حالياً</p>
-        <p class="message">سنعود لكم فور انطلاق المباريات</p>
+    <!-- الإضاءات المتحركة في الخلفية -->
+    <div class="glow-blob blob-1"></div>
+    <div class="glow-blob blob-2"></div>
 
+    <!-- بطاقة المحتوى الرئيسية -->
+    <div class="glass-card">
+        
+        <div class="status-badge">
+            <div class="status-dot"></div>
+            البث متوقف حالياً
+        </div>
+
+        <h1>الأسطورة ليو ميسي</h1>
+        <p class="main-msg">سنعود لكم فور انطلاق المباريات.</p>
         <p class="prayer">اللهم صلِّ وسلم على نبينا محمد ﷺ</p>
 
-        <a href="https://t.me/messi_1" class="channel-btn">
-            ✈️ انضموا للقناة لمتابعة الأخبار
+        <a href="https://t.me/messi_1" target="_blank" class="tg-button">
+            <!-- كود أيقونة تليجرام عالية الدقة -->
+            <svg class="tg-icon" viewBox="0 0 24 24">
+                <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm4.64 6.8c-.15 1.58-.8 5.42-1.13 7.19-.14.75-.42 1-.68 1.03-.58.05-1.02-.38-1.58-.75-.88-.58-1.38-.94-2.23-1.5-.99-.65-.35-1.01.22-1.59.15-.15 2.71-2.48 2.76-2.69a.2.2 0 00-.05-.18c-.06-.05-.14-.03-.21-.02-.09.02-1.49.95-4.22 2.79-.4.27-.76.41-1.08.4-.36-.01-1.04-.2-1.55-.37-.63-.2-1.12-.31-1.08-.66.02-.18.27-.36.74-.55 2.92-1.27 4.86-2.11 5.83-2.51 2.78-1.16 3.35-1.36 3.73-1.36.08 0 .27.02.39.12.1.08.13.19.14.27-.01.06.01.24 0 .24z"/>
+            </svg>
+            انضموا لقناتكم لمتابعة الأخبار أولاً بأول
         </a>
         
-        <div class="username">@messi_1</div>
+        <span class="username">@messi_1</span>
+
     </div>
 
 </body>
