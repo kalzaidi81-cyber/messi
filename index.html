@@ -5,7 +5,10 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>بث الأسطورة ليو ميسي المباشر</title>
     
+    <!-- خط Cairo الاحترافي -->
     <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;700;900&display=swap" rel="stylesheet">
+    
+    <!-- مكتبة تشغيل البث HLS -->
     <script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
 
     <style>
@@ -20,20 +23,20 @@
             align-items: center;
             min-height: 100vh;
             background-image: 
-                radial-gradient(circle at 15% 10%, rgba(116, 172, 223, 0.15), transparent 30%),
-                radial-gradient(circle at 85% 90%, rgba(212, 175, 55, 0.1), transparent 30%);
+                radial-gradient(circle at 15% 50%, rgba(0, 136, 204, 0.15), transparent 25%),
+                radial-gradient(circle at 85% 30%, rgba(212, 175, 55, 0.1), transparent 25%);
         }
 
         .premium-container {
             width: 100%;
             max-width: 900px;
-            background: rgba(255, 255, 255, 0.02);
-            backdrop-filter: blur(20px);
-            -webkit-backdrop-filter: blur(20px);
+            background: rgba(255, 255, 255, 0.03);
+            backdrop-filter: blur(15px);
+            -webkit-backdrop-filter: blur(15px);
             border: 1px solid rgba(255, 255, 255, 0.05);
-            border-radius: 28px;
+            border-radius: 24px;
             padding: 20px;
-            box-shadow: 0 40px 80px rgba(0, 0, 0, 0.8), inset 0 1px 1px rgba(255, 255, 255, 0.1);
+            box-shadow: 0 30px 60px rgba(0, 0, 0, 0.6), inset 0 1px 0 rgba(255, 255, 255, 0.1);
         }
 
         .header {
@@ -48,8 +51,8 @@
         .title-wrapper h1 {
             font-size: 1.4rem;
             font-weight: 900;
-            margin: 0 0 5px 0;
-            background: linear-gradient(135deg, #ffffff, #74acdf);
+            margin: 0;
+            background: linear-gradient(135deg, #ffffff, #a0a0a0);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
         }
@@ -63,39 +66,39 @@
         .live-badge {
             display: flex;
             align-items: center;
-            background: rgba(255, 59, 48, 0.15);
-            border: 1px solid rgba(255, 59, 48, 0.4);
-            color: #ff453a;
-            padding: 6px 14px;
+            background: rgba(212, 175, 55, 0.15);
+            border: 1px solid rgba(212, 175, 55, 0.3);
+            color: #d4af37;
+            padding: 8px 16px;
             border-radius: 50px;
-            font-size: 0.85rem;
-            font-weight: 900;
+            font-size: 0.9rem;
+            font-weight: 700;
         }
 
         .pulse-dot {
             width: 8px;
             height: 8px;
-            background: #ff453a;
+            background: #d4af37;
             border-radius: 50%;
             margin-left: 8px;
-            box-shadow: 0 0 10px #ff453a;
-            animation: pulse 1s infinite alternate;
+            box-shadow: 0 0 10px #d4af37;
+            animation: pulse 1.5s infinite;
         }
 
         @keyframes pulse {
-            0% { transform: scale(0.9); opacity: 0.7; }
-            100% { transform: scale(1.2); opacity: 1; box-shadow: 0 0 15px #ff453a; }
+            0% { box-shadow: 0 0 0 0 rgba(212, 175, 55, 0.7); }
+            70% { box-shadow: 0 0 0 10px rgba(212, 175, 55, 0); }
+            100% { box-shadow: 0 0 0 0 rgba(212, 175, 55, 0); }
         }
 
         .video-wrapper {
             width: 100%;
             background: #000;
-            border-radius: 20px;
+            border-radius: 16px;
             overflow: hidden;
-            box-shadow: 0 20px 50px rgba(0,0,0,0.7);
+            box-shadow: 0 15px 35px rgba(0,0,0,0.5);
             border: 1px solid rgba(255, 255, 255, 0.1);
             aspect-ratio: 16 / 9; 
-            position: relative;
         }
 
         video {
@@ -103,25 +106,24 @@
             height: 100%;
             object-fit: contain;
             display: block;
-            outline: none;
-            background-color: #000;
         }
 
+        /* أزرار التحكم والدعم السفلي */
         .action-zone {
             display: flex;
             flex-direction: column;
-            gap: 15px;
+            gap: 12px;
             margin-top: 20px;
             align-items: center;
         }
 
-        /* الزر الذهبي للتشغيل الخارجي (المنقذ) */
+        /* زر التشغيل الخارجي السحري لتخطي حظر السيرفرات */
         .external-play-btn {
             background: linear-gradient(135deg, #d4af37 0%, #aa841c 100%);
-            color: #000;
+            color: #000000;
             border: none;
-            padding: 16px 20px;
-            border-radius: 16px;
+            padding: 14px 28px;
+            border-radius: 50px;
             font-family: inherit;
             font-size: 1.05rem;
             font-weight: 900;
@@ -132,22 +134,21 @@
             justify-content: center;
             gap: 10px;
             width: 100%;
+            max-width: 450px;
             text-decoration: none;
-            box-shadow: 0 8px 25px rgba(212, 175, 55, 0.3);
-            text-align: center;
+            box-shadow: 0 6px 20px rgba(212, 175, 55, 0.3);
         }
 
         .external-play-btn:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 12px 30px rgba(212, 175, 55, 0.5);
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(212, 175, 55, 0.5);
         }
 
         .notice-text {
             font-size: 0.85rem;
-            color: #999;
+            color: #a0a0a0;
             text-align: center;
-            margin: 0;
-            line-height: 1.5;
+            margin: 0 10px;
         }
 
         .footer {
@@ -164,14 +165,20 @@
             background: linear-gradient(135deg, #2AABEE 0%, #229ED9 100%);
             color: #ffffff;
             text-decoration: none;
-            padding: 14px 35px;
-            border-radius: 16px;
-            font-size: 1.05rem;
-            font-weight: 900;
+            padding: 12px 30px;
+            border-radius: 14px;
+            font-size: 1rem;
+            font-weight: 700;
             transition: all 0.3s ease;
+            box-shadow: 0 10px 20px rgba(42, 171, 238, 0.25);
             width: 100%;
             max-width: 350px;
             box-sizing: border-box;
+        }
+
+        .tg-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 15px 25px rgba(42, 171, 238, 0.4);
         }
 
         .tg-btn svg {
@@ -183,10 +190,9 @@
 
         .username {
             display: block;
-            margin-top: 12px;
+            margin-top: 10px;
             color: #666;
             font-size: 0.85rem;
-            font-weight: 700;
         }
     </style>
 </head>
@@ -194,10 +200,11 @@
 
     <div class="premium-container">
         
+        <!-- الهيدر -->
         <div class="header">
             <div class="title-wrapper">
                 <h1>بث الأسطورة ليو ميسي</h1>
-                <p>الأرجنتين 🇦🇷 ضد الرأس الأخضر 🇨🇻</p>
+                <p>تغطية حصرية للمباريات 🐐</p>
             </div>
             <div class="live-badge">
                 <div class="pulse-dot"></div>
@@ -205,23 +212,26 @@
             </div>
         </div>
 
+        <!-- مشغل الفيديو الذكي داخل المتصفح -->
         <div class="video-wrapper">
-            <!-- الكود الأساسي البسيط والفعال بدون طبقات إضافية -->
             <video id="videoPlayer" controls autoplay playsinline webkit-playsinline></video>
         </div>
 
+        <!-- منطقة الدعم والأزرار لتخطي قيود السيرفر وتفعيل الصوت والتكبير الحتمي -->
         <div class="action-zone">
-            <!-- الزر الذهبي للتشغيل الخارجي لضمان عدم تعطل البث -->
+            
+            <!-- زر تشغيل خارجي فوري ومباشر -->
             <a href="https://stm.linkip.org/live/1957_.m3u8" class="external-play-btn" target="_blank">
-                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
                     <polygon points="5 3 19 12 5 21 5 3"></polygon>
                 </svg>
-                اضغط هنا للتشغيل المباشر (شاشة كاملة + صوت)
+                اضغط هنا للتشغيل المباشر (يدعم التكبير والصوت)
             </a>
             
-            <p class="notice-text">💡 ملاحظة: إذا واجهت شاشة سوداء بسبب حماية السيرفر، اضغط على الزر الذهبي بالأعلى وسيفتح البث فوراً بأعلى جودة.</p>
+            <p class="notice-text">💡 إذا لم يظهر الفيديو تلقائياً بسبب حماية السيرفر المصدر، اضغط على الزر الذهبي أعلاه ليفتح معك في مشغل الهاتف مباشرة بأعلى جودة وبدون قيود.</p>
         </div>
 
+        <!-- الفوتر ورابط القناة -->
         <div class="footer">
             <a href="https://t.me/messi_1" target="_blank" class="tg-btn">
                 <svg viewBox="0 0 24 24">
@@ -244,7 +254,7 @@
                 if (hls) { hls.destroy(); }
                 hls = new Hls({
                     maxBufferLength: 10,
-                    liveSyncDuration: 3, // تم الحفاظ على البث السريع جداً هنا
+                    liveSyncDuration: 3,
                     enableWorker: true
                 });
                 hls.loadSource(videoSrc);
@@ -265,4 +275,5 @@
     </script>
 </body>
 </html>
+
 
