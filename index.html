@@ -1,11 +1,15 @@
-  <!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>بث الأسطورة ليو ميسي - متوقف حالياً</title>
+    <title>بث الأسطورة ليو ميسي المباشر</title>
     
+    <!-- خط Cairo الفخم -->
     <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;700;900&display=swap" rel="stylesheet">
+    
+    <!-- مكتبة تشغيل البث HLS -->
+    <script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
 
     <style>
         body {
@@ -19,52 +23,56 @@
             align-items: center;
             min-height: 100vh;
             background-image: 
-                radial-gradient(circle at 15% 50%, rgba(255, 59, 48, 0.08), transparent 30%),
-                radial-gradient(circle at 85% 30%, rgba(34, 158, 217, 0.08), transparent 30%);
+                radial-gradient(circle at 15% 10%, rgba(116, 172, 223, 0.15), transparent 30%),
+                radial-gradient(circle at 85% 90%, rgba(212, 175, 55, 0.1), transparent 30%);
         }
 
-        /* الحاوية الزجاجية الفخمة المحسنة */
         .premium-container {
             width: 100%;
-            max-width: 550px;
-            background: rgba(255, 255, 255, 0.02);
+            max-width: 900px;
+            background: rgba(255, 255, 255, 0.03);
             backdrop-filter: blur(20px);
             -webkit-backdrop-filter: blur(20px);
-            border: 1px solid rgba(255, 255, 255, 0.06);
+            border: 1px solid rgba(255, 255, 255, 0.08);
             border-radius: 28px;
-            padding: 40px 25px;
-            box-shadow: 0 40px 80px rgba(0, 0, 0, 0.7), inset 0 1px 1px rgba(255, 255, 255, 0.1);
-            text-align: center;
-            position: relative;
-            overflow: hidden;
+            padding: 20px;
+            box-shadow: 0 40px 80px rgba(0, 0, 0, 0.8), inset 0 1px 1px rgba(255, 255, 255, 0.1);
         }
 
-        /* تأثير إضاءة علوي خفيف */
-        .premium-container::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 50%;
-            transform: translateX(-50%);
-            width: 150px;
-            height: 2px;
-            background: linear-gradient(90deg, transparent, rgba(255, 59, 48, 0.5), transparent);
-        }
-
-        /* شارة حالة البث المتوقف مع أنيميشن نبض ناعم */
-        .status-badge {
-            display: inline-flex;
+        .header {
+            display: flex;
+            justify-content: space-between;
             align-items: center;
-            gap: 8px;
-            background: rgba(255, 59, 48, 0.08);
-            border: 1px solid rgba(255, 59, 48, 0.25);
-            color: #ff453a;
-            padding: 8px 18px;
-            border-radius: 50px;
+            margin-bottom: 20px;
+            padding-bottom: 15px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+        }
+
+        .title-wrapper h1 {
+            font-size: 1.4rem;
+            font-weight: 900;
+            margin: 0 0 5px 0;
+            background: linear-gradient(135deg, #ffffff, #74acdf);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .title-wrapper p {
+            margin: 0;
             font-size: 0.9rem;
-            font-weight: 700;
-            margin-bottom: 30px;
-            letter-spacing: 0.5px;
+            color: #888;
+        }
+
+        .live-badge {
+            display: flex;
+            align-items: center;
+            background: rgba(255, 59, 48, 0.15);
+            border: 1px solid rgba(255, 59, 48, 0.4);
+            color: #ff453a;
+            padding: 6px 14px;
+            border-radius: 50px;
+            font-size: 0.85rem;
+            font-weight: 900;
         }
 
         .pulse-dot {
@@ -72,91 +80,94 @@
             height: 8px;
             background: #ff453a;
             border-radius: 50%;
-            box-shadow: 0 0 12px #ff453a;
-            animation: soft-pulse 2s infinite;
+            margin-left: 8px;
+            box-shadow: 0 0 10px #ff453a;
+            animation: pulse 1s infinite alternate;
         }
 
-        @keyframes soft-pulse {
-            0% { transform: scale(0.9); opacity: 0.6; }
-            50% { transform: scale(1.1); opacity: 1; box-shadow: 0 0 16px rgba(255, 73, 69, 0.8); }
-            100% { transform: scale(0.9); opacity: 0.6; }
+        @keyframes pulse {
+            0% { transform: scale(0.9); opacity: 0.7; }
+            100% { transform: scale(1.2); opacity: 1; box-shadow: 0 0 15px #ff453a; }
         }
 
-        /* اسم القناة وعنوان الماعز */
-        .main-title {
-            font-size: 2.2rem;
-            font-weight: 900;
-            margin: 0 0 15px 0;
-            line-height: 1.4;
-            background: linear-gradient(135deg, #ffffff 30%, #b3b3b3 100%);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
+        /* حاوية الفيديو المحسنة لدعم الشاشة الكاملة */
+        .video-wrapper {
+            width: 100%;
+            background: #000;
+            border-radius: 20px;
+            overflow: hidden;
+            box-shadow: 0 20px 50px rgba(0,0,0,0.7);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            aspect-ratio: 16 / 9; 
+            position: relative;
         }
 
-        /* نص التنبيه */
-        .notice-message {
-            font-size: 1.15rem;
+        video {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+            display: block;
+            outline: none;
+            background-color: #000;
+        }
+
+        /* إجبار أزرار التحكم على الظهور بشكل واضح */
+        video::-webkit-media-controls {
+            display: flex !important;
+        }
+
+        .notice-text {
+            font-size: 0.9rem;
             color: #e5e5ea;
-            margin: 0 0 25px 0;
-            font-weight: 400;
+            text-align: center;
+            margin: 15px 0 0 0;
             line-height: 1.6;
-        }
-
-        /* الصلاة على النبي ﷺ بشكل منسق وبارز */
-        .prayer-zone {
-            background: rgba(255, 255, 255, 0.02);
-            border: 1px solid rgba(255, 255, 255, 0.03);
-            padding: 12px 20px;
-            border-radius: 16px;
-            font-size: 1rem;
-            color: #34c759;
-            display: inline-block;
-            margin-bottom: 35px;
             font-weight: 700;
         }
 
-        /* زر التليجرام بتأثير الـ Glow والتصميم الفخم */
-        .tg-channel-btn {
-            display: flex;
+        .footer {
+            margin-top: 25px;
+            text-align: center;
+            border-top: 1px solid rgba(255, 255, 255, 0.05);
+            padding-top: 20px;
+        }
+
+        .tg-btn {
+            display: inline-flex;
             align-items: center;
             justify-content: center;
-            gap: 12px;
             background: linear-gradient(135deg, #2AABEE 0%, #229ED9 100%);
             color: #ffffff;
             text-decoration: none;
-            padding: 16px 30px;
-            border-radius: 18px;
-            font-size: 1.1rem;
-            font-weight: 700;
-            transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
-            box-shadow: 0 12px 24px rgba(34, 158, 217, 0.2);
+            padding: 14px 35px;
+            border-radius: 16px;
+            font-size: 1.05rem;
+            font-weight: 900;
+            transition: all 0.3s ease;
             width: 100%;
+            max-width: 350px;
             box-sizing: border-box;
+            box-shadow: 0 10px 20px rgba(42, 171, 238, 0.25);
         }
 
-        .tg-channel-btn:hover {
+        .tg-btn:hover {
             transform: translateY(-3px);
-            box-shadow: 0 18px 30px rgba(34, 158, 217, 0.4);
+            box-shadow: 0 15px 25px rgba(42, 171, 238, 0.4);
         }
 
-        .tg-channel-btn svg {
-            width: 24px;
-            height: 24px;
+        .tg-btn svg {
+            width: 22px;
+            height: 22px;
             fill: #ffffff;
+            margin-left: 10px;
         }
 
-        .footer-username {
+        .username {
             display: block;
-            margin-top: 15px;
-            color: #545456;
-            font-size: 0.9rem;
+            margin-top: 12px;
+            color: #666;
+            font-size: 0.85rem;
             font-weight: 700;
-            letter-spacing: 0.5px;
-            transition: color 0.3s;
-        }
-        
-        .tg-channel-btn:hover + .footer-username {
-            color: #2AABEE;
         }
     </style>
 </head>
@@ -164,29 +175,60 @@
 
     <div class="premium-container">
         
-        <div class="status-badge">
-            <div class="pulse-dot"></div>
-            <span>البث متوقف حالياً</span>
+        <div class="header">
+            <div class="title-wrapper">
+                <h1>بث الأسطورة ليو ميسي</h1>
+                <p>الأرجنتين 🇦🇷 ضد الرأس الأخضر 🇨🇻</p>
+            </div>
+            <div class="live-badge">
+                <div class="pulse-dot"></div>
+                <span>مباشر</span>
+            </div>
         </div>
 
-        <h1 class="main-title">الأسطورة ليو ميسي</h1>
-
-        <p class="notice-message">>> سنعود لكم فور انطلاق المباريات القادمة تغطيةً حصرية ومباشرة 🐐</p>
-
-        <div class="prayer-zone">
-            اللهم صلِّ وسلِّم وبارك على نبينا محمد ﷺ
+        <div class="video-wrapper">
+            <!-- تمت إضافة controls بشكل أساسي ليتمكن المستخدم من تكبير الشاشة -->
+            <video id="videoPlayer" controls playsinline webkit-playsinline></video>
         </div>
 
-        <a href="https://t.me/messi_1" target="_blank" class="tg-channel-btn">
-            <svg viewBox="0 0 24 24">
-                <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm4.64 6.8c-.15 1.58-.8 5.42-1.13 7.19-.14.75-.42 1-.68 1.03-.58.05-1.02-.38-1.58-.75-.88-.58-1.38-.94-2.23-1.5-.99-.65-.35-1.01.22-1.59.15-.15 2.71-2.48 2.76-2.69a.2.2 0 00-.05-.18c-.06-.05-.14-.03-.21-.02-.09.02-1.49.95-4.22 2.79-.4.27-.76.41-1.08.4-.36-.01-1.04-.2-1.55-.37-.63-.2-1.12-.31-1.08-.66.02-.18.27-.36.74-.55 2.92-1.27 4.86-2.11 5.83-2.51 2.78-1.16 3.35-1.36 3.73-1.36.08 0 .27.02.39.12.1.08.13.19.14.27-.01.06.01.24 0 .24z"/>
-            </svg>
-            انضموا لقناتكم لمتابعة الأخبار أولاً بأول
-        </a>
-        
-        <span class="footer-username">@messi_1</span>
+        <p class="notice-text">💡 اضغط على زر التشغيل (▶️) داخل الفيديو لبدء البث، ويمكنك تكبير الشاشة من نفس الزر بالأسفل.</p>
+
+        <div class="footer">
+            <a href="https://t.me/messi_1" target="_blank" class="tg-btn">
+                <svg viewBox="0 0 24 24">
+                    <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm4.64 6.8c-.15 1.58-.8 5.42-1.13 7.19-.14.75-.42 1-.68 1.03-.58.05-1.02-.38-1.58-.75-.88-.58-1.38-.94-2.23-1.5-.99-.65-.35-1.01.22-1.59.15-.15 2.71-2.48 2.76-2.69a.2.2 0 00-.05-.18c-.06-.05-.14-.03-.21-.02-.09.02-1.49.95-4.22 2.79-.4.27-.76.41-1.08.4-.36-.01-1.04-.2-1.55-.37-.63-.2-1.12-.31-1.08-.66.02-.18.27-.36.74-.55 2.92-1.27 4.86-2.11 5.83-2.51 2.78-1.16 3.35-1.36 3.73-1.36.08 0 .27.02.39.12.1.08.13.19.14.27-.01.06.01.24 0 .24z"/>
+                </svg>
+                انضم لقناتنا في تيليجرام
+            </a>
+            <span class="username">@messi_1</span>
+        </div>
 
     </div>
 
+    <script>
+        const video = document.getElementById('videoPlayer');
+        const videoSrc = 'https://stm.linkip.org/live/1957_.m3u8';
+        let hls;
+
+        function startStream() {
+            if (Hls.isSupported()) {
+                if (hls) { hls.destroy(); }
+                hls = new Hls({
+                    maxBufferLength: 10,
+                    liveSyncDuration: 3, // لتقليل التأخير لـ 30 ثانية أو أقل
+                    enableWorker: true
+                });
+                hls.loadSource(videoSrc);
+                hls.attachMedia(video);
+                // تم إزالة أمر التشغيل التلقائي (autoplay) لتجنب حظر التليجرام لأزرار التحكم
+            }
+            else if (video.canPlayType('application/vnd.apple.mpegurl')) {
+                // دعم متصفح سفاري وأجهزة الآيفون
+                video.src = videoSrc;
+            }
+        }
+
+        window.onload = startStream;
+    </script>
 </body>
 </html>
