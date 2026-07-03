@@ -2,17 +2,11 @@
 <html lang="ar" dir="rtl">
 <head>
     <meta charset="UTF-8">
-    <!-- إعدادات تمنع زوم الصفحة وتدعم الشاشة الكاملة -->
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>تغطية مباريات الأرجنتين - بث مباشر</title>
+    <title>بث قناة الأسطورة ليو ميسي</title>
     
-    <!-- خطوط وتصميم -->
     <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;700;900&display=swap" rel="stylesheet">
-    
-    <!-- مكتبة مشغل Video.js العالمية -->
     <link href="https://vjs.zencdn.net/8.5.2/video-js.css" rel="stylesheet" />
-    
-    <!-- مكتبة تليجرام لفتح الصفحة بكامل الشاشة -->
     <script src="https://telegram.org/js/telegram-web-app.js"></script>
 
     <style>
@@ -33,7 +27,7 @@
 
         .premium-container {
             width: 100%;
-            max-width: 800px;
+            max-width: 900px;
             background: rgba(255, 255, 255, 0.02);
             border: 1px solid rgba(255, 255, 255, 0.05);
             border-radius: 20px;
@@ -93,7 +87,7 @@
             100% { transform: scale(1.3); opacity: 1; }
         }
 
-        /* تعديلات مخصصة لمشغل Video.js ليناسب الجوال */
+        /* حاوية الفيديو */
         .video-wrapper {
             width: 100%;
             border-radius: 15px;
@@ -101,8 +95,42 @@
             box-shadow: 0 10px 30px rgba(0,0,0,0.8);
             border: 1px solid rgba(255, 255, 255, 0.1);
             background: #000;
+            position: relative; /* مهم جداً للعلامة المائية */
         }
 
+        /* تنسيق العلامة المائية (حقوق القناة) */
+        .watermark-logo {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            background: rgba(0, 0, 0, 0.5);
+            backdrop-filter: blur(8px);
+            -webkit-backdrop-filter: blur(8px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            padding: 8px 15px;
+            border-radius: 12px;
+            z-index: 10;
+            pointer-events: none; /* عشان ما تعيق لمس الشاشة */
+            text-align: right;
+            line-height: 1.4;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.5);
+        }
+
+        .wm-title {
+            color: #ffffff;
+            font-size: 0.85rem;
+            font-weight: 900;
+            display: block;
+        }
+
+        .wm-link {
+            color: #74acdf;
+            font-size: 0.75rem;
+            font-weight: 700;
+            letter-spacing: 0.5px;
+        }
+
+        /* تعديلات مشغل الفيديو */
         .video-js {
             width: 100% !important;
             height: auto !important;
@@ -121,47 +149,69 @@
             line-height: 3em !important;
         }
 
-        .external-btn {
-            display: block;
-            background: #2a2a2a;
-            color: #fff;
+        /* الفوتر وزر التليجرام */
+        .footer {
+            margin-top: 20px;
             text-align: center;
-            padding: 12px;
-            border-radius: 12px;
+            width: 100%;
+        }
+
+        .tg-btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            background: linear-gradient(135deg, #2AABEE 0%, #229ED9 100%);
+            color: #ffffff;
             text-decoration: none;
-            font-weight: 700;
-            margin-top: 15px;
-            border: 1px solid #444;
-            transition: 0.3s;
+            padding: 14px 35px;
+            border-radius: 16px;
+            font-size: 1.05rem;
+            font-weight: 900;
+            transition: all 0.3s ease;
+            width: 100%;
+            max-width: 350px;
+            box-sizing: border-box;
+            box-shadow: 0 10px 20px rgba(42, 171, 238, 0.25);
         }
 
-        .external-btn:hover {
-            background: #333;
+        .tg-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 15px 25px rgba(42, 171, 238, 0.4);
         }
 
-        .notice {
-            text-align: center;
-            font-size: 0.8rem;
-            color: #777;
-            margin-top: 10px;
+        .tg-btn svg {
+            width: 22px;
+            height: 22px;
+            fill: #ffffff;
+            margin-left: 10px;
         }
     </style>
 </head>
 <body>
 
     <div class="premium-container">
+        
+        <!-- الهيدر -->
         <div class="header">
             <div class="title-wrapper">
                 <h1>تغطية الأسطورة ميسي</h1>
-                <p>البث المباشر (سيرفر رئيسي)</p>
+                <p>الأرجنتين 🇦🇷 ضد الرأس الأخضر 🇨🇻</p>
             </div>
             <div class="live-badge">
                 <div class="pulse-dot"></div>
-                <span>LIVE</span>
+                <span>مباشر</span>
             </div>
         </div>
 
+        <!-- حاوية الفيديو مع الحقوق -->
         <div class="video-wrapper">
+            
+            <!-- حقوق القناة (العلامة المائية) -->
+            <div class="watermark-logo">
+                <span class="wm-title">👑 بث قناة الأسطورة ليو ميسي</span>
+                <span class="wm-link">t.me/messi_1</span>
+            </div>
+
             <!-- مشغل Video.js الاحترافي -->
             <video
                 id="my-video"
@@ -170,44 +220,39 @@
                 preload="auto"
                 playsinline
                 webkit-playsinline
-                data-setup='{"fluid": true}'>
+                data-setup='{"fluid": true, "controlBar": {"fullscreenToggle": true}}'>
                 <source src="https://stm.linkip.org/live/1957_.m3u8" type="application/x-mpegURL">
-                <p class="vjs-no-js">
-                    لتشغيل هذا الفيديو، يرجى تفعيل الجافا سكريبت أو استخدام متصفح يدعم HTML5.
-                </p>
             </video>
         </div>
 
-        <!-- زر احتياطي في حال كان سيرفر البث يمنع (CORS) -->
-        <a href="https://stm.linkip.org/live/1957_.m3u8" class="external-btn" target="_blank">
-            إذا لم يعمل المشغل، اضغط هنا لفتح البث الخارجي
-        </a>
-        <p class="notice">المشغل يدعم تكبير الشاشة (Full Screen) من أيقونة المربع أسفل الفيديو.</p>
+        <!-- زر الانضمام للقناة -->
+        <div class="footer">
+            <a href="https://t.me/messi_1" target="_blank" class="tg-btn">
+                <svg viewBox="0 0 24 24">
+                    <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm4.64 6.8c-.15 1.58-.8 5.42-1.13 7.19-.14.75-.42 1-.68 1.03-.58.05-1.02-.38-1.58-.75-.88-.58-1.38-.94-2.23-1.5-.99-.65-.35-1.01.22-1.59.15-.15 2.71-2.48 2.76-2.69a.2.2 0 00-.05-.18c-.06-.05-.14-.03-.21-.02-.09.02-1.49.95-4.22 2.79-.4.27-.76.41-1.08.4-.36-.01-1.04-.2-1.55-.37-.63-.2-1.12-.31-1.08-.66.02-.18.27-.36.74-.55 2.92-1.27 4.86-2.11 5.83-2.51 2.78-1.16 3.35-1.36 3.73-1.36.08 0 .27.02.39.12.1.08.13.19.14.27-.01.06.01.24 0 .24z"/>
+                </svg>
+                انضم لقناتنا في تيليجرام
+            </a>
+        </div>
 
     </div>
 
-    <!-- استدعاء سكريبت Video.js -->
+    <!-- استدعاء سكريبت المشغل -->
     <script src="https://vjs.zencdn.net/8.5.2/video.min.js"></script>
     
     <script>
-        // إجبار صفحة التليجرام المصغرة (Web App) على التمدد لكامل الشاشة
+        // توسيع شاشة التليجرام لأقصى حد ممكن
         if (window.Telegram && window.Telegram.WebApp) {
             window.Telegram.WebApp.expand();
         }
 
-        // إعداد المشغل
+        // إعداد المشغل لضمان عمل أزرار التحكم وتكبير الشاشة
         var player = videojs('my-video', {
             html5: {
                 vhs: {
-                    overrideNative: true // محاولة تجاوز قيود المتصفح الأصلية
-                },
-                nativeAudioTracks: false,
-                nativeVideoTracks: false
+                    overrideNative: true
+                }
             }
-        });
-
-        player.ready(function() {
-            console.log('المشغل جاهز!');
         });
     </script>
 </body>
