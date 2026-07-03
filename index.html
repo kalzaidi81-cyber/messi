@@ -2,14 +2,18 @@
 <html lang="ar" dir="rtl">
 <head>
     <meta charset="UTF-8">
+    <!-- إعدادات تمنع زوم الصفحة وتدعم الشاشة الكاملة -->
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>بث الأسطورة ليو ميسي المباشر</title>
+    <title>تغطية مباريات الأرجنتين - بث مباشر</title>
     
-    <!-- خط Cairo الفخم -->
+    <!-- خطوط وتصميم -->
     <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;700;900&display=swap" rel="stylesheet">
     
-    <!-- مكتبة تشغيل البث HLS -->
-    <script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
+    <!-- مكتبة مشغل Video.js العالمية -->
+    <link href="https://vjs.zencdn.net/8.5.2/video-js.css" rel="stylesheet" />
+    
+    <!-- مكتبة تليجرام لفتح الصفحة بكامل الشاشة -->
+    <script src="https://telegram.org/js/telegram-web-app.js"></script>
 
     <style>
         body {
@@ -17,49 +21,48 @@
             color: #ffffff;
             font-family: 'Cairo', sans-serif;
             margin: 0;
-            padding: 15px;
+            padding: 10px;
             display: flex;
-            justify-content: center;
+            flex-direction: column;
             align-items: center;
             min-height: 100vh;
             background-image: 
-                radial-gradient(circle at 15% 10%, rgba(116, 172, 223, 0.15), transparent 30%),
-                radial-gradient(circle at 85% 90%, rgba(212, 175, 55, 0.1), transparent 30%);
+                radial-gradient(circle at 15% 10%, rgba(116, 172, 223, 0.1), transparent 30%),
+                radial-gradient(circle at 85% 90%, rgba(212, 175, 55, 0.05), transparent 30%);
         }
 
         .premium-container {
             width: 100%;
-            max-width: 900px;
-            background: rgba(255, 255, 255, 0.03);
-            backdrop-filter: blur(20px);
-            -webkit-backdrop-filter: blur(20px);
-            border: 1px solid rgba(255, 255, 255, 0.08);
-            border-radius: 28px;
-            padding: 20px;
-            box-shadow: 0 40px 80px rgba(0, 0, 0, 0.8), inset 0 1px 1px rgba(255, 255, 255, 0.1);
+            max-width: 800px;
+            background: rgba(255, 255, 255, 0.02);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            border-radius: 20px;
+            padding: 15px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.6);
+            margin-top: 10px;
         }
 
         .header {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            margin-bottom: 20px;
+            margin-bottom: 15px;
             padding-bottom: 15px;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
         }
 
         .title-wrapper h1 {
-            font-size: 1.4rem;
+            font-size: 1.3rem;
             font-weight: 900;
             margin: 0 0 5px 0;
-            background: linear-gradient(135deg, #ffffff, #74acdf);
+            background: linear-gradient(135deg, #74acdf, #ffffff);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
         }
 
         .title-wrapper p {
             margin: 0;
-            font-size: 0.9rem;
+            font-size: 0.85rem;
             color: #888;
         }
 
@@ -69,166 +72,143 @@
             background: rgba(255, 59, 48, 0.15);
             border: 1px solid rgba(255, 59, 48, 0.4);
             color: #ff453a;
-            padding: 6px 14px;
+            padding: 5px 12px;
             border-radius: 50px;
-            font-size: 0.85rem;
+            font-size: 0.8rem;
             font-weight: 900;
         }
 
         .pulse-dot {
-            width: 8px;
-            height: 8px;
+            width: 6px;
+            height: 6px;
             background: #ff453a;
             border-radius: 50%;
-            margin-left: 8px;
-            box-shadow: 0 0 10px #ff453a;
+            margin-left: 6px;
+            box-shadow: 0 0 8px #ff453a;
             animation: pulse 1s infinite alternate;
         }
 
         @keyframes pulse {
             0% { transform: scale(0.9); opacity: 0.7; }
-            100% { transform: scale(1.2); opacity: 1; box-shadow: 0 0 15px #ff453a; }
+            100% { transform: scale(1.3); opacity: 1; }
         }
 
-        /* حاوية الفيديو المحسنة لدعم الشاشة الكاملة */
+        /* تعديلات مخصصة لمشغل Video.js ليناسب الجوال */
         .video-wrapper {
             width: 100%;
-            background: #000;
-            border-radius: 20px;
+            border-radius: 15px;
             overflow: hidden;
-            box-shadow: 0 20px 50px rgba(0,0,0,0.7);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.8);
             border: 1px solid rgba(255, 255, 255, 0.1);
-            aspect-ratio: 16 / 9; 
-            position: relative;
+            background: #000;
         }
 
-        video {
-            width: 100%;
-            height: 100%;
-            object-fit: contain;
+        .video-js {
+            width: 100% !important;
+            height: auto !important;
+            aspect-ratio: 16/9;
+        }
+
+        .vjs-big-play-button {
+            top: 50% !important;
+            left: 50% !important;
+            transform: translate(-50%, -50%) !important;
+            border-radius: 50% !important;
+            background-color: rgba(116, 172, 223, 0.8) !important;
+            border: none !important;
+            width: 3em !important;
+            height: 3em !important;
+            line-height: 3em !important;
+        }
+
+        .external-btn {
             display: block;
-            outline: none;
-            background-color: #000;
-        }
-
-        /* إجبار أزرار التحكم على الظهور بشكل واضح */
-        video::-webkit-media-controls {
-            display: flex !important;
-        }
-
-        .notice-text {
-            font-size: 0.9rem;
-            color: #e5e5ea;
+            background: #2a2a2a;
+            color: #fff;
             text-align: center;
-            margin: 15px 0 0 0;
-            line-height: 1.6;
-            font-weight: 700;
-        }
-
-        .footer {
-            margin-top: 25px;
-            text-align: center;
-            border-top: 1px solid rgba(255, 255, 255, 0.05);
-            padding-top: 20px;
-        }
-
-        .tg-btn {
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            background: linear-gradient(135deg, #2AABEE 0%, #229ED9 100%);
-            color: #ffffff;
+            padding: 12px;
+            border-radius: 12px;
             text-decoration: none;
-            padding: 14px 35px;
-            border-radius: 16px;
-            font-size: 1.05rem;
-            font-weight: 900;
-            transition: all 0.3s ease;
-            width: 100%;
-            max-width: 350px;
-            box-sizing: border-box;
-            box-shadow: 0 10px 20px rgba(42, 171, 238, 0.25);
-        }
-
-        .tg-btn:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 15px 25px rgba(42, 171, 238, 0.4);
-        }
-
-        .tg-btn svg {
-            width: 22px;
-            height: 22px;
-            fill: #ffffff;
-            margin-left: 10px;
-        }
-
-        .username {
-            display: block;
-            margin-top: 12px;
-            color: #666;
-            font-size: 0.85rem;
             font-weight: 700;
+            margin-top: 15px;
+            border: 1px solid #444;
+            transition: 0.3s;
+        }
+
+        .external-btn:hover {
+            background: #333;
+        }
+
+        .notice {
+            text-align: center;
+            font-size: 0.8rem;
+            color: #777;
+            margin-top: 10px;
         }
     </style>
 </head>
 <body>
 
     <div class="premium-container">
-        
         <div class="header">
             <div class="title-wrapper">
-                <h1>بث الأسطورة ليو ميسي</h1>
-                <p>الأرجنتين 🇦🇷 ضد الرأس الأخضر 🇨🇻</p>
+                <h1>تغطية الأسطورة ميسي</h1>
+                <p>البث المباشر (سيرفر رئيسي)</p>
             </div>
             <div class="live-badge">
                 <div class="pulse-dot"></div>
-                <span>مباشر</span>
+                <span>LIVE</span>
             </div>
         </div>
 
         <div class="video-wrapper">
-            <!-- تمت إضافة controls بشكل أساسي ليتمكن المستخدم من تكبير الشاشة -->
-            <video id="videoPlayer" controls playsinline webkit-playsinline></video>
+            <!-- مشغل Video.js الاحترافي -->
+            <video
+                id="my-video"
+                class="video-js vjs-default-skin vjs-big-play-centered"
+                controls
+                preload="auto"
+                playsinline
+                webkit-playsinline
+                data-setup='{"fluid": true}'>
+                <source src="https://stm.linkip.org/live/1957_.m3u8" type="application/x-mpegURL">
+                <p class="vjs-no-js">
+                    لتشغيل هذا الفيديو، يرجى تفعيل الجافا سكريبت أو استخدام متصفح يدعم HTML5.
+                </p>
+            </video>
         </div>
 
-        <p class="notice-text">💡 اضغط على زر التشغيل (▶️) داخل الفيديو لبدء البث، ويمكنك تكبير الشاشة من نفس الزر بالأسفل.</p>
-
-        <div class="footer">
-            <a href="https://t.me/messi_1" target="_blank" class="tg-btn">
-                <svg viewBox="0 0 24 24">
-                    <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm4.64 6.8c-.15 1.58-.8 5.42-1.13 7.19-.14.75-.42 1-.68 1.03-.58.05-1.02-.38-1.58-.75-.88-.58-1.38-.94-2.23-1.5-.99-.65-.35-1.01.22-1.59.15-.15 2.71-2.48 2.76-2.69a.2.2 0 00-.05-.18c-.06-.05-.14-.03-.21-.02-.09.02-1.49.95-4.22 2.79-.4.27-.76.41-1.08.4-.36-.01-1.04-.2-1.55-.37-.63-.2-1.12-.31-1.08-.66.02-.18.27-.36.74-.55 2.92-1.27 4.86-2.11 5.83-2.51 2.78-1.16 3.35-1.36 3.73-1.36.08 0 .27.02.39.12.1.08.13.19.14.27-.01.06.01.24 0 .24z"/>
-                </svg>
-                انضم لقناتنا في تيليجرام
-            </a>
-            <span class="username">@messi_1</span>
-        </div>
+        <!-- زر احتياطي في حال كان سيرفر البث يمنع (CORS) -->
+        <a href="https://stm.linkip.org/live/1957_.m3u8" class="external-btn" target="_blank">
+            إذا لم يعمل المشغل، اضغط هنا لفتح البث الخارجي
+        </a>
+        <p class="notice">المشغل يدعم تكبير الشاشة (Full Screen) من أيقونة المربع أسفل الفيديو.</p>
 
     </div>
 
+    <!-- استدعاء سكريبت Video.js -->
+    <script src="https://vjs.zencdn.net/8.5.2/video.min.js"></script>
+    
     <script>
-        const video = document.getElementById('videoPlayer');
-        const videoSrc = 'https://stm.linkip.org/live/1957_.m3u8';
-        let hls;
-
-        function startStream() {
-            if (Hls.isSupported()) {
-                if (hls) { hls.destroy(); }
-                hls = new Hls({
-                    maxBufferLength: 10,
-                    liveSyncDuration: 3, // لتقليل التأخير لـ 30 ثانية أو أقل
-                    enableWorker: true
-                });
-                hls.loadSource(videoSrc);
-                hls.attachMedia(video);
-                // تم إزالة أمر التشغيل التلقائي (autoplay) لتجنب حظر التليجرام لأزرار التحكم
-            }
-            else if (video.canPlayType('application/vnd.apple.mpegurl')) {
-                // دعم متصفح سفاري وأجهزة الآيفون
-                video.src = videoSrc;
-            }
+        // إجبار صفحة التليجرام المصغرة (Web App) على التمدد لكامل الشاشة
+        if (window.Telegram && window.Telegram.WebApp) {
+            window.Telegram.WebApp.expand();
         }
 
-        window.onload = startStream;
+        // إعداد المشغل
+        var player = videojs('my-video', {
+            html5: {
+                vhs: {
+                    overrideNative: true // محاولة تجاوز قيود المتصفح الأصلية
+                },
+                nativeAudioTracks: false,
+                nativeVideoTracks: false
+            }
+        });
+
+        player.ready(function() {
+            console.log('المشغل جاهز!');
+        });
     </script>
 </body>
 </html>
