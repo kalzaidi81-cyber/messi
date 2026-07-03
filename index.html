@@ -1,57 +1,156 @@
 <!DOCTYPE html>
-<html lang="ar">
+<html lang="ar" dir="rtl">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>مشغل البث</title>
-    <!-- استدعاء HLS.js -->
+    <title>بث مباشر | قناة الأسطورة</title>
+    <!-- استدعاء HLS.js لتشغيل البث -->
     <script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
     <style>
-        body { margin: 0; background: #000; display: flex; align-items: center; justify-content: center; height: 100vh; color: white; font-family: sans-serif; }
-        #video { width: 100%; max-width: 800px; height: auto; }
-        #error-log { position: absolute; top: 10px; color: red; background: rgba(0,0,0,0.8); padding: 10px; }
+        body {
+            margin: 0;
+            background-color: #05070a;
+            color: #ffffff;
+            font-family: system-ui, -apple-system, sans-serif;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+        }
+
+        .player-wrapper {
+            width: 100%;
+            max-width: 800px;
+            padding: 15px;
+            box-sizing: border-box;
+        }
+
+        .video-container {
+            position: relative;
+            width: 100%;
+            aspect-ratio: 16/9;
+            background: #000;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.8);
+            border: 1px solid rgba(116, 172, 223, 0.2);
+        }
+
+        video {
+            width: 100%;
+            height: 100%;
+            outline: none;
+            object-fit: contain;
+        }
+
+        /* نافذة الإشعارات والأخطاء فوق الفيديو */
+        #status-overlay {
+            position: absolute;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0, 0, 0, 0.85);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            z-index: 10;
+            padding: 20px;
+            box-sizing: border-box;
+            font-weight: bold;
+            font-size: 1.1rem;
+        }
+
+        .channel-title {
+            text-align: center;
+            margin-top: 15px;
+            font-size: 1.2rem;
+            font-weight: bold;
+            color: #74acdf;
+        }
+        
+        .channel-title span {
+            color: #aaa;
+            font-size: 0.9rem;
+            display: block;
+            margin-top: 5px;
+        }
     </style>
 </head>
 <body>
 
-    <div id="error-log">جاري التحميل...</div>
-    <video id="video" controls playsinline></video>
+    <div class="player-wrapper">
+        <div class="video-container">
+            <div id="status-overlay" style="color: #ffcc00;">جاري الاتصال بالسيرفر...</div>
+            <video id="video-player" controls playsinline></video>
+        </div>
+        
+        <div class="channel-title">
+            👑 تغطية قناة الأسطورة ليو ميسي
+            <span>مخصص للمشتركين</span>
+        </div>
+    </div>
 
     <script>
-        const video = document.getElementById('video');
-        const log = document.getElementById('error-log');
-        const videoSrc = "https://stm.linkip.org/live/1956_.m3u8";
+        const video = document.getElementById('video-player');
+        const overlay = document.getElementById('status-overlay');
+        
+        // الرابط الخاص بك
+        const streamUrl = "https://use23.playlist.ttvnw.net/v1/playlist/CuYERvVXwFgiEj9iSFkAg6r6WS3nA8x8lGqa0KSivLP4kCj6nKe3wJ1n_cVhEsMrVz9yQ3VBMeoTIn7V9ZYpg_tk0tZND5LKkGRn4Wu530oGOLVCTtVKewLCAWQ6-5PKkCimwjSFIkz9MZKnlLJLBw7BQBHKMy-b3Gl0v_CE8DnROKR2NJNj9REW3EBXGDTQeFoRYGY1DrtSc0CenSG1cguDn5M1sxTfmtSqN6gSkD7IjBASpIdsruTlWCpcAo624imXCJXQz9QlYatKsaxu7J9KLB03X_Xy4Brvtlq3eriOTCvv6UiI60Q2K0umkQ6Ti5GIdNpOSZqflQoVG2zZqnNN5h52pUok7yIyz4gou8ClLqHLzZ8xeWGr5-dERhxZf-KycGLOKV3pEHXKR4ISVSfyW0XkC1HkImmotAziAdX_XlihcVS9sqYnTi9Xpd4J2I6TGpAv5__OUuN3_tWUWxaziu09Haltc2ZRHgUd1UXS_f1lyav-duB63G36SdHYZFTFbztkPvxDX_jadldD8ENbUlJXlc8602-A9VVWA_R9BhNo3Dm-eD9X_Y93diLc-jPjQKWsSfdlgrEZ1XvLVSmHVuQ25cPTyCLyOcyF6GPBc9dv7R6zmyARg0pZudUzphXwXO0DMasCCI53LMhFTfQH13-drIKChYl4g2liGEwFCtpyfoLUIvFlPR3PL_S3lwcXiQG9WcCMB6jiWSY57uLaMRj_nCsNTYA7aQeVrE59nxcafxXHuuPRy2MLKNVFFUj8t8LS3mcsX_7v85TX4QquIGdCF639n6WhR8TIV7dpjLbtsRhPVmoaDEdrCg5K0k2MHVZu0CABKgl1cy1lYXN0LTIwwQ8.m3u8";
 
-        function showError(msg) {
-            log.innerText = "خطأ: " + msg;
-            console.error(msg);
+        function showMessage(msg, color) {
+            overlay.style.display = 'flex';
+            overlay.style.color = color;
+            overlay.innerText = msg;
         }
 
-        if (Hls.isSupported()) {
-            const hls = new Hls();
-            hls.loadSource(videoSrc);
-            hls.attachMedia(video);
-            
-            hls.on(Hls.Events.MANIFEST_PARSED, function() {
-                log.style.display = 'none';
-                video.play().catch(e => showError("يتطلب تفاعل للتشغيل التلقائي"));
-            });
+        function initPlayer() {
+            if (Hls.isSupported()) {
+                const hls = new Hls({
+                    debug: false,
+                    maxMaxBufferLength: 30
+                });
+                
+                hls.loadSource(streamUrl);
+                hls.attachMedia(video);
+                
+                hls.on(Hls.Events.MANIFEST_PARSED, function() {
+                    overlay.style.display = 'none'; // إخفاء الرسالة عند نجاح الاتصال
+                    video.play().catch(() => showMessage("اضغط على زر التشغيل (Play) في الأسفل", "#fff"));
+                });
 
-            hls.on(Hls.Events.ERROR, function(event, data) {
-                if (data.fatal) {
-                    showError("مشكلة في الاتصال بالسيرفر: " + data.type);
-                }
-            });
+                hls.on(Hls.Events.ERROR, function(event, data) {
+                    if (data.fatal) {
+                        switch (data.type) {
+                            case Hls.ErrorTypes.NETWORK_ERROR:
+                                showMessage("سيرفر البث يرفض الاتصال (حظر حماية أو انتهت صلاحية الرابط)", "#ff453a");
+                                break;
+                            case Hls.ErrorTypes.MEDIA_ERROR:
+                                showMessage("خطأ في قراءة ملفات الفيديو من السيرفر", "#ffcc00");
+                                break;
+                            default:
+                                showMessage("تعذر تشغيل هذا الرابط.", "#ff453a");
+                                break;
+                        }
+                    }
+                });
+            } 
+            // لدعم أجهزة الآيفون بشكل مباشر
+            else if (video.canPlayType('application/vnd.apple.mpegurl')) {
+                video.src = streamUrl;
+                video.addEventListener('loadedmetadata', function() {
+                    overlay.style.display = 'none';
+                    video.play();
+                });
+                video.addEventListener('error', function() {
+                    showMessage("الرابط لا يعمل أو محظور على هذا المتصفح", "#ff453a");
+                });
+            } else {
+                showMessage("متصفحك لا يدعم مشغلات البث المباشر", "#ff453a");
+            }
         }
-        else if (video.canPlayType('application/vnd.apple.mpegurl')) {
-            video.src = videoSrc;
-            video.addEventListener('loadedmetadata', () => {
-                log.style.display = 'none';
-                video.play();
-            });
-        } else {
-            showError("متصفحك لا يدعم هذا النوع من البث");
-        }
+
+        // تشغيل الوظيفة عند تحميل الصفحة
+        window.addEventListener('DOMContentLoaded', initPlayer);
     </script>
 </body>
 </html>
