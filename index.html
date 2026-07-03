@@ -6,7 +6,8 @@
     <title>بث قناة الأسطورة ليو ميسي</title>
     
     <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;700;900&display=swap" rel="stylesheet">
-    <link href="https://vjs.zencdn.net/8.5.2/video-js.css" rel="stylesheet" />
+    <!-- استدعاء مكتبة HLS.js بدلاً من Video.js -->
+    <script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
     <script src="https://telegram.org/js/telegram-web-app.js"></script>
 
     <style>
@@ -23,7 +24,6 @@
             background-image: 
                 radial-gradient(circle at 15% 10%, rgba(116, 172, 223, 0.1), transparent 30%),
                 radial-gradient(circle at 85% 90%, rgba(212, 175, 55, 0.05), transparent 30%);
-            transition: background 0.3s ease;
         }
 
         .premium-container {
@@ -35,7 +35,6 @@
             padding: 15px;
             box-shadow: 0 20px 40px rgba(0, 0, 0, 0.6);
             margin-top: 10px;
-            transition: all 0.3s ease;
         }
 
         .header {
@@ -62,14 +61,12 @@
             color: #888;
         }
 
-        /* حاوية الأزرار في الهيدر */
         .header-actions {
             display: flex;
             align-items: center;
             gap: 10px;
         }
 
-        /* زر التحديث الجديد */
         .refresh-btn {
             display: flex;
             align-items: center;
@@ -83,24 +80,9 @@
             font-size: 0.8rem;
             font-weight: 900;
             cursor: pointer;
-            transition: all 0.3s ease;
             outline: none;
         }
 
-        .refresh-btn:hover, .refresh-btn:active {
-            background: rgba(116, 172, 223, 0.3);
-            transform: scale(0.95);
-        }
-
-        .refresh-btn svg {
-            width: 14px;
-            height: 14px;
-            fill: #74acdf;
-            margin-left: 5px;
-            transition: transform 0.5s ease;
-        }
-
-        /* أنيميشن الدوران عند الضغط على التحديث */
         .refresh-btn.spinning svg {
             animation: spin 1s linear infinite;
         }
@@ -136,7 +118,7 @@
             100% { transform: scale(1.3); opacity: 1; }
         }
 
-        /* حاوية الفيديو الأساسية */
+        /* حاوية الفيديو المحدثة */
         .video-wrapper {
             width: 100%;
             border-radius: 15px;
@@ -144,31 +126,34 @@
             box-shadow: 0 10px 30px rgba(0,0,0,0.8);
             border: 1px solid rgba(255, 255, 255, 0.1);
             background: #000;
-            transition: all 0.3s ease;
-        }
-
-        /* تنسيق الفيديو */
-        .video-js {
-            width: 100% !important;
-            height: auto !important;
+            position: relative;
             aspect-ratio: 16/9;
         }
 
-        .vjs-big-play-button {
-            top: 50% !important;
-            left: 50% !important;
-            transform: translate(-50%, -50%) !important;
-            border-radius: 50% !important;
-            background-color: rgba(116, 172, 223, 0.8) !important;
-            border: none !important;
-            width: 3em !important;
-            height: 3em !important;
-            line-height: 3em !important;
+        /* تنسيق مشغل HTML5 الأصلي */
+        video {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+            outline: none;
         }
 
-        /* ========================================= */
-        /* الحل الجذري لتكبير الشاشة (CSS Full-Window) */
-        /* ========================================= */
+        /* زر التكبير المخصص */
+        .custom-fullscreen-btn {
+            position: absolute;
+            bottom: 15px;
+            left: 15px;
+            background: rgba(0, 0, 0, 0.6);
+            border: 1px solid rgba(255,255,255,0.2);
+            color: white;
+            padding: 8px 12px;
+            border-radius: 8px;
+            cursor: pointer;
+            z-index: 10;
+            font-family: 'Cairo', sans-serif;
+            font-size: 0.8rem;
+        }
+
         .css-fullscreen {
             position: fixed !important;
             top: 0 !important;
@@ -189,16 +174,6 @@
             justify-content: center;
         }
 
-        .css-fullscreen .video-js {
-            padding-top: 0 !important; 
-            height: 100% !important;
-        }
-        
-        .css-fullscreen video {
-            object-fit: contain !important;
-        }
-        /* ========================================= */
-
         .rights-banner {
             display: block;
             background: linear-gradient(90deg, rgba(116, 172, 223, 0.1) 0%, rgba(255, 255, 255, 0.05) 100%);
@@ -211,19 +186,10 @@
             margin-top: 15px;
             font-weight: 900;
             font-size: 0.95rem;
-            transition: all 0.3s ease;
-            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
-        }
-
-        .rights-banner:hover {
-            background: linear-gradient(90deg, rgba(116, 172, 223, 0.2) 0%, rgba(255, 255, 255, 0.1) 100%);
-            transform: translateY(-2px);
-            border-color: rgba(116, 172, 223, 0.6);
         }
 
         .rights-banner span {
             color: #74acdf;
-            font-weight: 700;
         }
 
         .footer {
@@ -243,16 +209,9 @@
             border-radius: 16px;
             font-size: 1.05rem;
             font-weight: 900;
-            transition: all 0.3s ease;
             width: 100%;
             max-width: 350px;
             box-sizing: border-box;
-            box-shadow: 0 10px 20px rgba(42, 171, 238, 0.25);
-        }
-
-        .tg-btn:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 15px 25px rgba(42, 171, 238, 0.4);
         }
 
         .tg-btn svg {
@@ -261,13 +220,27 @@
             fill: #ffffff;
             margin-left: 10px;
         }
+
+        /* رسالة حالة البث */
+        #statusMessage {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            color: #ff453a;
+            font-weight: bold;
+            background: rgba(0,0,0,0.8);
+            padding: 10px 20px;
+            border-radius: 10px;
+            display: none;
+            z-index: 5;
+            text-align: center;
+        }
     </style>
 </head>
 <body>
 
     <div class="premium-container">
-        
-        <!-- الهيدر -->
         <div class="header">
             <div class="title-wrapper">
                 <h1>تغطية الأسطورة ميسي</h1>
@@ -275,9 +248,8 @@
             </div>
             
             <div class="header-actions">
-                <!-- زر التحديث الجديد -->
                 <button id="refreshBtn" class="refresh-btn">
-                    <svg viewBox="0 0 24 24">
+                    <svg viewBox="0 0 24 24" width="14" height="14" style="margin-left:5px; fill:#74acdf;">
                         <path d="M17.65 6.35A7.95 7.95 0 0012 4c-4.42 0-7.99 3.58-7.99 8s3.57 8 7.99 8c3.73 0 6.84-2.55 7.73-6h-2.08A5.99 5.99 0 0112 18c-3.31 0-6-2.69-6-6s2.69-6 6-6c1.66 0 3.14.69 4.22 1.78L13 11h7V4l-2.35 2.35z"/>
                     </svg>
                     تحديث
@@ -290,27 +262,16 @@
             </div>
         </div>
 
-        <!-- حاوية الفيديو -->
         <div class="video-wrapper" id="videoContainer">
-            <!-- مشغل Video.js الاحترافي -->
-            <video
-                id="my-video"
-                class="video-js vjs-default-skin vjs-big-play-centered"
-                controls
-                preload="auto"
-                playsinline
-                webkit-playsinline
-                data-setup='{"fluid": true, "controlBar": {"fullscreenToggle": true}}'>
-                <source src="https://use23.playlist.ttvnw.net/v1/playlist/CuYERvVXwFgiEj9iSFkAg6r6WS3nA8x8lGqa0KSivLP4kCj6nKe3wJ1n_cVhEsMrVz9yQ3VBMeoTIn7V9ZYpg_tk0tZND5LKkGRn4Wu530oGOLVCTtVKewLCAWQ6-5PKkCimwjSFIkz9MZKnlLJLBw7BQBHKMy-b3Gl0v_CE8DnROKR2NJNj9REW3EBXGDTQeFoRYGY1DrtSc0CenSG1cguDn5M1sxTfmtSqN6gSkD7IjBASpIdsruTlWCpcAo624imXCJXQz9QlYatKsaxu7J9KLB03X_Xy4Brvtlq3eriOTCvv6UiI60Q2K0umkQ6Ti5GIdNpOSZqflQoVG2zZqnNN5h52pUok7yIyz4gou8ClLqHLzZ8xeWGr5-dERhxZf-KycGLOKV3pEHXKR4ISVSfyW0XkC1HkImmotAziAdX_XlihcVS9sqYnTi9Xpd4J2I6TGpAv5__OUuN3_tWUWxaziu09Haltc2ZRHgUd1UXS_f1lyav-duB63G36SdHYZFTFbztkPvxDX_jadldD8ENbUlJXlc8602-A9VVWA_R9BhNo3Dm-eD9X_Y93diLc-jPjQKWsSfdlgrEZ1XvLVSmHVuQ25cPTyCLyOcyF6GPBc9dv7R6zmyARg0pZudUzphXwXO0DMasCCI53LMhFTfQH13-drIKChYl4g2liGEwFCtpyfoLUIvFlPR3PL_S3lwcXiQG9WcCMB6jiWSY57uLaMRj_nCsNTYA7aQeVrE59nxcafxXHuuPRy2MLKNVFFUj8t8LS3mcsX_7v85TX4QquIGdCF639n6WhR8TIV7dpjLbtsRhPVmoaDEdrCg5K0k2MHVZu0CABKgl1cy1lYXN0LTIwwQ8.m3u8" type="application/x-mpegURL">
-            </video>
+            <div id="statusMessage">جاري كسر الحماية وتشغيل البث...</div>
+            <video id="my-video" controls playsinline webkit-playsinline></video>
+            <button class="custom-fullscreen-btn" id="fsToggle">تكبير الشاشة ⛶</button>
         </div>
 
-        <!-- بنر الحقوق الجديد تحت الفيديو -->
         <a href="https://t.me/messi_1" target="_blank" class="rights-banner">
             👑 بث قناة الأسطورة ليو ميسي | <span>انضم للقناة من هنا</span>
         </a>
 
-        <!-- الفوتر -->
         <div class="footer">
             <a href="https://t.me/messi_1" target="_blank" class="tg-btn">
                 <svg viewBox="0 0 24 24">
@@ -319,71 +280,95 @@
                 تغطية حصرية @messi_1
             </a>
         </div>
-
     </div>
 
-    <!-- استدعاء سكريبت المشغل -->
-    <script src="https://vjs.zencdn.net/8.5.2/video.min.js"></script>
-    
     <script>
-        // توسيع شاشة التليجرام لأقصى حد ممكن
         if (window.Telegram && window.Telegram.WebApp) {
             window.Telegram.WebApp.expand();
         }
 
-        // تهيئة المشغل
-        var player = videojs('my-video', {
-            html5: { vhs: { overrideNative: true } }
-        });
+        // الرابط الخاص بك
+        const originalUrl = "https://use23.playlist.ttvnw.net/v1/playlist/CuYERvVXwFgiEj9iSFkAg6r6WS3nA8x8lGqa0KSivLP4kCj6nKe3wJ1n_cVhEsMrVz9yQ3VBMeoTIn7V9ZYpg_tk0tZND5LKkGRn4Wu530oGOLVCTtVKewLCAWQ6-5PKkCimwjSFIkz9MZKnlLJLBw7BQBHKMy-b3Gl0v_CE8DnROKR2NJNj9REW3EBXGDTQeFoRYGY1DrtSc0CenSG1cguDn5M1sxTfmtSqN6gSkD7IjBASpIdsruTlWCpcAo624imXCJXQz9QlYatKsaxu7J9KLB03X_Xy4Brvtlq3eriOTCvv6UiI60Q2K0umkQ6Ti5GIdNpOSZqflQoVG2zZqnNN5h52pUok7yIyz4gou8ClLqHLzZ8xeWGr5-dERhxZf-KycGLOKV3pEHXKR4ISVSfyW0XkC1HkImmotAziAdX_XlihcVS9sqYnTi9Xpd4J2I6TGpAv5__OUuN3_tWUWxaziu09Haltc2ZRHgUd1UXS_f1lyav-duB63G36SdHYZFTFbztkPvxDX_jadldD8ENbUlJXlc8602-A9VVWA_R9BhNo3Dm-eD9X_Y93diLc-jPjQKWsSfdlgrEZ1XvLVSmHVuQ25cPTyCLyOcyF6GPBc9dv7R6zmyARg0pZudUzphXwXO0DMasCCI53LMhFTfQH13-drIKChYl4g2liGEwFCtpyfoLUIvFlPR3PL_S3lwcXiQG9WcCMB6jiWSY57uLaMRj_nCsNTYA7aQeVrE59nxcafxXHuuPRy2MLKNVFFUj8t8LS3mcsX_7v85TX4QquIGdCF639n6WhR8TIV7dpjLbtsRhPVmoaDEdrCg5K0k2MHVZu0CABKgl1cy1lYXN0LTIwwQ8.m3u8";
+        
+        // خادم وسيط (Proxy) لكسر حماية CORS
+        const proxyUrl = "https://corsproxy.io/?url=" + encodeURIComponent(originalUrl);
+        
+        const video = document.getElementById('my-video');
+        const statusMsg = document.getElementById('statusMessage');
+        let hlsPlayer = null;
+
+        function loadVideo(useProxy = false) {
+            const streamUrl = useProxy ? proxyUrl : originalUrl;
+            statusMsg.style.display = useProxy ? 'block' : 'none';
+
+            if (Hls.isSupported()) {
+                if (hlsPlayer) { hlsPlayer.destroy(); }
+                
+                hlsPlayer = new Hls({
+                    debug: false,
+                    enableWorker: true,
+                    lowLatencyMode: true
+                });
+
+                hlsPlayer.loadSource(streamUrl);
+                hlsPlayer.attachMedia(video);
+                
+                hlsPlayer.on(Hls.Events.MANIFEST_PARSED, function() {
+                    statusMsg.style.display = 'none';
+                    video.play().catch(() => console.log("يحتاج تفاعل المستخدم للتشغيل"));
+                });
+
+                // إذا فشل الرابط الأصلي، قم بتشغيل البروكسي تلقائياً
+                hlsPlayer.on(Hls.Events.ERROR, function(event, data) {
+                    if (data.fatal) {
+                        if (!useProxy) {
+                            console.log("حظر CORS مكتشف، جاري التحويل للبروكسي...");
+                            loadVideo(true);
+                        } else {
+                            statusMsg.innerText = "الرابط منتهي الصلاحية أو محمي برقم IP محدد.";
+                            statusMsg.style.display = 'block';
+                        }
+                    }
+                });
+            } 
+            // دعم أجهزة الآيفون (iOS Safari)
+            else if (video.canPlayType('application/vnd.apple.mpegurl')) {
+                video.src = streamUrl;
+                video.addEventListener('loadedmetadata', function() {
+                    video.play();
+                });
+                video.addEventListener('error', function() {
+                    if (!useProxy) { loadVideo(true); }
+                });
+            }
+        }
+
+        // تشغيل البث عند فتح الصفحة
+        loadVideo(false);
 
         // برمجة زر التحديث
-        var refreshBtn = document.getElementById('refreshBtn');
+        const refreshBtn = document.getElementById('refreshBtn');
         refreshBtn.addEventListener('click', function() {
-            // تشغيل تأثير الدوران للأيقونة
             refreshBtn.classList.add('spinning');
-            
-            // حفظ الرابط الحالي وإعادة تلقيمه للمشغل
-            var currentSrc = player.src();
-            player.pause();
-            player.src({ src: currentSrc, type: 'application/x-mpegURL' });
-            player.load();
-            player.play();
-
-            // إيقاف تأثير الدوران بعد ثانية
-            setTimeout(function() {
-                refreshBtn.classList.remove('spinning');
-            }, 1000);
+            loadVideo(false);
+            setTimeout(() => refreshBtn.classList.remove('spinning'), 1000);
         });
 
-        // هندسة عكسية لزر التكبير عشان يشتغل غصب داخل التليجرام
-        player.ready(function() {
-            var myPlayer = this;
-            var controlBar = myPlayer.controlBar;
-            var fsButton = controlBar.getChild('fullscreenToggle');
-
-            if (fsButton) {
-                // إيقاف الأمر الافتراضي للمتصفح
-                fsButton.off('tap');
-                fsButton.off('click');
-
-                // تطبيق التكبير الجذري عبر الـ CSS
-                var toggleCustomFullscreen = function() {
-                    var container = document.getElementById('videoContainer');
-                    container.classList.toggle('css-fullscreen');
-                    
-                    if (container.classList.contains('css-fullscreen')) {
-                        document.body.style.overflow = 'hidden'; // إخفاء التمرير
-                        if (window.Telegram && window.Telegram.WebApp) {
-                            window.Telegram.WebApp.expand();
-                        }
-                    } else {
-                        document.body.style.overflow = ''; // إعادة التمرير
-                    }
-                };
-
-                // ربط الزر بالوظيفة الجديدة
-                fsButton.on('tap', toggleCustomFullscreen);
-                fsButton.on('click', toggleCustomFullscreen);
+        // برمجة زر التكبير الإجباري
+        const fsToggle = document.getElementById('fsToggle');
+        fsToggle.addEventListener('click', function() {
+            const container = document.getElementById('videoContainer');
+            container.classList.toggle('css-fullscreen');
+            
+            if (container.classList.contains('css-fullscreen')) {
+                document.body.style.overflow = 'hidden';
+                fsToggle.innerText = "تصغير الشاشة ✖";
+                if (window.Telegram && window.Telegram.WebApp) {
+                    window.Telegram.WebApp.expand();
+                }
+            } else {
+                document.body.style.overflow = '';
+                fsToggle.innerText = "تكبير الشاشة ⛶";
             }
         });
     </script>
