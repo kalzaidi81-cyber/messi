@@ -1,27 +1,51 @@
 <!DOCTYPE html>
-<html lang="ar">
+<html lang="ar" dir="rtl">
 <head>
     <meta charset="UTF-8">
-    <title>تغطية البث</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>مشاهدة البث المباشر</title>
+    <script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
     <style>
-        body { margin: 0; background: #05070a; display: flex; justify-content: center; align-items: center; height: 100vh; }
-        .video-container { width: 100%; max-width: 900px; aspect-ratio: 16/9; border-radius: 12px; overflow: hidden; box-shadow: 0 10px 30px rgba(0,0,0,0.8); }
+        body { margin: 0; background: #000; color: #fff; font-family: sans-serif; display: flex; flex-direction: column; align-items: center; justify-content: center; height: 100vh; }
+        .container { width: 95%; max-width: 850px; text-align: center; }
+        video { width: 100%; border-radius: 10px; background: #111; aspect-ratio: 16/9; }
+        .btn-redirect { margin-top: 20px; padding: 15px 30px; background: #e50914; color: white; text-decoration: none; font-weight: bold; border-radius: 5px; display: inline-block; }
+        .error-msg { color: #ff453a; margin-bottom: 10px; display: none; }
     </style>
 </head>
 <body>
-    
-    <div class="video-container" id="twitch-embed"></div>
 
-    <script src="https://embed.twitch.tv/embed/v1.js"></script>
-    <script>
-        new Twitch.Embed("twitch-embed", {
-            width: "100%",
-            height: "100%",
-            channel: "اسم_القناة_هنا", /* 👈 ضع هنا اسم القناة الأصلية التي تبث في تويتش */
-            layout: "video",
-            autoplay: true,
-            // parent: ["yourwebsite.com"] /* أزل علامتي السلاش وضع رابط موقعك إذا رفعته على سيرفر */
+<div class="container">
+    <div id="status" class="error-msg">جاري محاولة الاتصال... إذا لم يعمل البث، اضغط على الزر بالأسفل.</div>
+    <video id="video" controls playsinline></video>
+    <br>
+    <a href="https://use23.playlist.ttvnw.net/v1/playlist/CuYERvVXwFgiEj9iSFkAg6r6WS3nA8x8lGqa0KSivLP4kCj6nKe3wJ1n_cVhEsMrVz9yQ3VBMeoTIn7V9ZYpg_tk0tZND5LKkGRn4Wu530oGOLVCTtVKewLCAWQ6-5PKkCimwjSFIkz9MZKnlLJLBw7BQBHKMy-b3Gl0v_CE8DnROKR2NJNj9REW3EBXGDTQeFoRYGY1DrtSc0CenSG1cguDn5M1sxTfmtSqN6gSkD7IjBASpIdsruTlWCpcAo624imXCJXQz9QlYatKsaxu7J9KLB03X_Xy4Brvtlq3eriOTCvv6UiI60Q2K0umkQ6Ti5GIdNpOSZqflQoVG2zZqnNN5h52pUok7yIyz4gou8ClLqHLzZ8xeWGr5-dERhxZf-KycGLOKV3pEHXKR4ISVSfyW0XkC1HkImmotAziAdX_XlihcVS9sqYnTi9Xpd4J2I6TGpAv5__OUuN3_tWUWxaziu09Haltc2ZRHgUd1UXS_f1lyav-duB63G36SdHYZFTFbztkPvxDX_jadldD8ENbUlJXlc8602-A9VVWA_R9BhNo3Dm-eD9X_Y93diLc-jPjQKWsSfdlgrEZ1XvLVSmHVuQ25cPTyCLyOcyF6GPBc9dv7R6zmyARg0pZudUzphXwXO0DMasCCI53LMhFTfQH13-drIKChYl4g2liGEwFCtpyfoLUIvFlPR3PL_S3lwcXiQG9WcCMB6jiWSY57uLaMRj_nCsNTYA7aQeVrE59nxcafxXHuuPRy2MLKNVFFUj8t8LS3mcsX_7v85TX4QquIGdCF639n6WhR8TIV7dpjLbtsRhPVmoaDEdrCg5K0k2MHVZu0CABKgl1cy1lYXN0LTIwwQ8.m3u8" 
+       target="_blank" class="btn-redirect">اضغط هنا للانتقال المباشر للبث (إذا لم يعمل المشغل)</a>
+</div>
+
+<script>
+    const video = document.getElementById('video');
+    const status = document.getElementById('status');
+    const url = "https://use23.playlist.ttvnw.net/v1/playlist/CuYERvVXwFgiEj9iSFkAg6r6WS3nA8x8lGqa0KSivLP4kCj6nKe3wJ1n_cVhEsMrVz9yQ3VBMeoTIn7V9ZYpg_tk0tZND5LKkGRn4Wu530oGOLVCTtVKewLCAWQ6-5PKkCimwjSFIkz9MZKnlLJLBw7BQBHKMy-b3Gl0v_CE8DnROKR2NJNj9REW3EBXGDTQeFoRYGY1DrtSc0CenSG1cguDn5M1sxTfmtSqN6gSkD7IjBASpIdsruTlWCpcAo624imXCJXQz9QlYatKsaxu7J9KLB03X_Xy4Brvtlq3eriOTCvv6UiI60Q2K0umkQ6Ti5GIdNpOSZqflQoVG2zZqnNN5h52pUok7yIyz4gou8ClLqHLzZ8xeWGr5-dERhxZf-KycGLOKV3pEHXKR4ISVSfyW0XkC1HkImmotAziAdX_XlihcVS9sqYnTi9Xpd4J2I6TGpAv5__OUuN3_tWUWxaziu09Haltc2ZRHgUd1UXS_f1lyav-duB63G36SdHYZFTFbztkPvxDX_jadldD8ENbUlJXlc8602-A9VVWA_R9BhNo3Dm-eD9X_Y93diLc-jPjQKWsSfdlgrEZ1XvLVSmHVuQ25cPTyCLyOcyF6GPBc9dv7R6zmyARg0pZudUzphXwXO0DMasCCI53LMhFTfQH13-drIKChYl4g2liGEwFCtpyfoLUIvFlPR3PL_S3lwcXiQG9WcCMB6jiWSY57uLaMRj_nCsNTYA7aQeVrE59nxcafxXHuuPRy2MLKNVFFUj8t8LS3mcsX_7v85TX4QquIGdCF639n6WhR8TIV7dpjLbtsRhPVmoaDEdrCg5K0k2MHVZu0CABKgl1cy1lYXN0LTIwwQ8.m3u8";
+
+    if (Hls.isSupported()) {
+        var hls = new Hls();
+        hls.loadSource(url);
+        hls.attachMedia(video);
+        hls.on(Hls.Events.MANIFEST_PARSED, function() {
+            video.play();
+            status.style.display = 'none';
         });
-    </script>
+        hls.on(Hls.Events.ERROR, function (event, data) {
+            if (data.fatal) {
+                status.style.display = 'block';
+                status.innerText = "البث محمي من العرض المباشر (سيرفر تويتش يرفض العرض). اضغط الزر بالأسفل.";
+            }
+        });
+    } else if (video.canPlayType('application/vnd.apple.mpegurl')) {
+        video.src = url;
+    }
+</script>
+
 </body>
 </html>
