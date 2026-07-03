@@ -62,6 +62,53 @@
             color: #888;
         }
 
+        /* حاوية الأزرار في الهيدر */
+        .header-actions {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        /* زر التحديث الجديد */
+        .refresh-btn {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: rgba(116, 172, 223, 0.15);
+            border: 1px solid rgba(116, 172, 223, 0.3);
+            color: #74acdf;
+            padding: 5px 10px;
+            border-radius: 50px;
+            font-family: 'Cairo', sans-serif;
+            font-size: 0.8rem;
+            font-weight: 900;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            outline: none;
+        }
+
+        .refresh-btn:hover, .refresh-btn:active {
+            background: rgba(116, 172, 223, 0.3);
+            transform: scale(0.95);
+        }
+
+        .refresh-btn svg {
+            width: 14px;
+            height: 14px;
+            fill: #74acdf;
+            margin-left: 5px;
+            transition: transform 0.5s ease;
+        }
+
+        /* أنيميشن الدوران عند الضغط على التحديث */
+        .refresh-btn.spinning svg {
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            100% { transform: rotate(-360deg); }
+        }
+
         .live-badge {
             display: flex;
             align-items: center;
@@ -152,7 +199,6 @@
         }
         /* ========================================= */
 
-        /* بنر الحقوق الجديد المطور (قابل للضغط) */
         .rights-banner {
             display: block;
             background: linear-gradient(90deg, rgba(116, 172, 223, 0.1) 0%, rgba(255, 255, 255, 0.05) 100%);
@@ -180,7 +226,6 @@
             font-weight: 700;
         }
 
-        /* الفوتر وزر التليجرام */
         .footer {
             margin-top: 20px;
             text-align: center;
@@ -228,9 +273,20 @@
                 <h1>تغطية الأسطورة ميسي</h1>
                 <p>الأرجنتين 🇦🇷 ضد الرأس الأخضر 🇨🇻</p>
             </div>
-            <div class="live-badge">
-                <div class="pulse-dot"></div>
-                <span>مباشر</span>
+            
+            <div class="header-actions">
+                <!-- زر التحديث الجديد -->
+                <button id="refreshBtn" class="refresh-btn">
+                    <svg viewBox="0 0 24 24">
+                        <path d="M17.65 6.35A7.95 7.95 0 0012 4c-4.42 0-7.99 3.58-7.99 8s3.57 8 7.99 8c3.73 0 6.84-2.55 7.73-6h-2.08A5.99 5.99 0 0112 18c-3.31 0-6-2.69-6-6s2.69-6 6-6c1.66 0 3.14.69 4.22 1.78L13 11h7V4l-2.35 2.35z"/>
+                    </svg>
+                    تحديث
+                </button>
+
+                <div class="live-badge">
+                    <div class="pulse-dot"></div>
+                    <span>مباشر</span>
+                </div>
             </div>
         </div>
 
@@ -249,7 +305,7 @@
             </video>
         </div>
 
-        <!-- بنر الحقوق الجديد تحت الفيديو (رابط مباشر للقناة) -->
+        <!-- بنر الحقوق الجديد تحت الفيديو -->
         <a href="https://t.me/messi_1" target="_blank" class="rights-banner">
             👑 بث قناة الأسطورة ليو ميسي | <span>انضم للقناة من هنا</span>
         </a>
@@ -278,6 +334,25 @@
         // تهيئة المشغل
         var player = videojs('my-video', {
             html5: { vhs: { overrideNative: true } }
+        });
+
+        // برمجة زر التحديث
+        var refreshBtn = document.getElementById('refreshBtn');
+        refreshBtn.addEventListener('click', function() {
+            // تشغيل تأثير الدوران للأيقونة
+            refreshBtn.classList.add('spinning');
+            
+            // حفظ الرابط الحالي وإعادة تلقيمه للمشغل
+            var currentSrc = player.src();
+            player.pause();
+            player.src({ src: currentSrc, type: 'application/x-mpegURL' });
+            player.load();
+            player.play();
+
+            // إيقاف تأثير الدوران بعد ثانية
+            setTimeout(function() {
+                refreshBtn.classList.remove('spinning');
+            }, 1000);
         });
 
         // هندسة عكسية لزر التكبير عشان يشتغل غصب داخل التليجرام
