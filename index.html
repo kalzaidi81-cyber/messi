@@ -2,283 +2,37 @@
 <html lang="ar" dir="rtl">
 <head>
     <meta charset="UTF-8">
-    <!-- إعدادات الشاشة لمنع التقريب العشوائي وجعلها تبدو كتطبيق احترافي -->
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>بث الأسطورة ليو ميسي المباشر</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>عنوان الصفحة</title>
     
-    <!-- خط Cairo الفخم -->
-    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;700;900&display=swap" rel="stylesheet">
-    
-    <!-- مكتبة تشغيل البث HLS -->
-    <script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
-
     <style>
-        /* الأساسيات والخلفية */
         body {
-            background-color: #05070a;
-            color: #ffffff;
-            font-family: 'Cairo', sans-serif;
+            font-family: Arial, sans-serif;
             margin: 0;
-            padding: 15px;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            min-height: 100vh;
-            background-image: 
-                radial-gradient(circle at 15% 50%, rgba(0, 136, 204, 0.15), transparent 25%),
-                radial-gradient(circle at 85% 30%, rgba(212, 175, 55, 0.1), transparent 25%);
-        }
-
-        /* الحاوية الزجاجية الفخمة */
-        .premium-container {
-            width: 100%;
-            max-width: 900px;
-            background: rgba(255, 255, 255, 0.03);
-            backdrop-filter: blur(15px);
-            -webkit-backdrop-filter: blur(15px);
-            border: 1px solid rgba(255, 255, 255, 0.05);
-            border-radius: 24px;
             padding: 20px;
-            box-shadow: 0 30px 60px rgba(0, 0, 0, 0.6), inset 0 1px 0 rgba(255, 255, 255, 0.1);
+            background-color: #f4f4f4;
         }
-
-        /* الهيدر */
-        .header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 20px;
-            padding-bottom: 15px;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
-        }
-
-        .title-wrapper h1 {
-            font-size: 1.4rem;
-            font-weight: 900;
-            margin: 0;
-            background: linear-gradient(135deg, #ffffff, #a0a0a0);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-        }
-
-        .title-wrapper p {
-            margin: 0;
-            font-size: 0.9rem;
-            color: #888;
-        }
-
-        /* مؤشر البث المباشر */
-        .live-badge {
-            display: flex;
-            align-items: center;
-            background: rgba(255, 59, 48, 0.15);
-            border: 1px solid rgba(255, 59, 48, 0.3);
-            color: #ff3b30;
-            padding: 8px 16px;
-            border-radius: 50px;
-            font-size: 0.9rem;
-            font-weight: 700;
-        }
-
-        .pulse-dot {
-            width: 8px;
-            height: 8px;
-            background: #ff3b30;
-            border-radius: 50%;
-            margin-left: 8px;
-            box-shadow: 0 0 10px #ff3b30;
-            animation: pulse 1.5s infinite;
-        }
-
-        @keyframes pulse {
-            0% { box-shadow: 0 0 0 0 rgba(255, 59, 48, 0.7); }
-            70% { box-shadow: 0 0 0 10px rgba(255, 59, 48, 0); }
-            100% { box-shadow: 0 0 0 0 rgba(255, 59, 48, 0); }
-        }
-
-        /* مشغل الفيديو */
-        .video-wrapper {
-            width: 100%;
-            background: #000;
-            border-radius: 16px;
-            overflow: hidden;
-            box-shadow: 0 15px 35px rgba(0,0,0,0.5);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            position: relative;
-            /* نسبة العرض إلى الارتفاع للحفاظ على شكل المشغل */
-            aspect-ratio: 16 / 9; 
-        }
-
-        video {
-            width: 100%;
-            height: 100%;
-            object-fit: contain;
-            display: block;
-            outline: none;
-        }
-
-        /* شريط التحكم السفلي */
-        .actions {
-            display: flex;
-            justify-content: center;
-            margin-top: 25px;
-        }
-
-        .refresh-btn {
-            background: rgba(255, 255, 255, 0.05);
-            border: 1px solid rgba(255, 255, 255, 0.1);
+        header {
+            background: #333;
             color: #fff;
-            padding: 12px 25px;
-            border-radius: 50px;
-            font-family: inherit;
-            font-size: 1rem;
-            font-weight: 700;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-
-        .refresh-btn:hover {
-            background: rgba(255, 255, 255, 0.1);
-            transform: translateY(-2px);
-        }
-
-        /* الفوتر ورابط القناة */
-        .footer {
-            margin-top: 30px;
+            padding: 10px 0;
             text-align: center;
-        }
-
-        .tg-btn {
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            background: linear-gradient(135deg, #2AABEE 0%, #229ED9 100%);
-            color: #ffffff;
-            text-decoration: none;
-            padding: 14px 35px;
-            border-radius: 14px;
-            font-size: 1.1rem;
-            font-weight: 700;
-            transition: all 0.3s ease;
-            box-shadow: 0 10px 20px rgba(42, 171, 238, 0.25);
-            width: 100%;
-            max-width: 350px;
-            box-sizing: border-box;
-        }
-
-        .tg-btn:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 15px 25px rgba(42, 171, 238, 0.4);
-        }
-
-        .tg-btn svg {
-            width: 24px;
-            height: 24px;
-            fill: #ffffff;
-            margin-left: 10px;
-        }
-
-        .username {
-            display: block;
-            margin-top: 12px;
-            color: #888;
-            font-size: 0.9rem;
-            letter-spacing: 1px;
         }
     </style>
 </head>
 <body>
 
-    <div class="premium-container">
-        
-        <!-- الهيدر -->
-        <div class="header">
-            <div class="title-wrapper">
-                <h1>بث الأسطورة ليو ميسي</h1>
-                <p>تغطية حصرية 🐐</p>
-            </div>
-            <div class="live-badge" id="statusBadge">
-                <div class="pulse-dot"></div>
-                <span id="statusText">مباشر</span>
-            </div>
-        </div>
+    <header>
+        <h1>مرحباً بك في موقعي</h1>
+    </header>
 
-        <!-- مشغل الفيديو -->
-        <div class="video-wrapper">
-            <!-- تم إضافة الخصائص اللازمة لدعم الشاشة الكاملة على جميع الأجهزة -->
-            <video id="videoPlayer" controls autoplay playsinline webkit-playsinline></video>
-        </div>
+    <main>
+        <p>هذا هو محتوى الصفحة الرئيسي.</p>
+    </main>
 
-        <!-- زر التحديث -->
-        <div class="actions">
-            <button class="refresh-btn" onclick="reloadStream()">
-                <span>تحديث البث</span>
-                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                    <path d="M21.5 2v6h-6M2.13 15.57a10 10 0 1 0 3.43-11.44l-4.14 4.14"/>
-                </svg>
-            </button>
-        </div>
+    <footer>
+        <p>جميع الحقوق محفوظة &copy; 2026</p>
+    </footer>
 
-        <!-- الفوتر -->
-        <div class="footer">
-            <a href="https://t.me/messi_1" target="_blank" class="tg-btn">
-                <svg viewBox="0 0 24 24">
-                    <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm4.64 6.8c-.15 1.58-.8 5.42-1.13 7.19-.14.75-.42 1-.68 1.03-.58.05-1.02-.38-1.58-.75-.88-.58-1.38-.94-2.23-1.5-.99-.65-.35-1.01.22-1.59.15-.15 2.71-2.48 2.76-2.69a.2.2 0 00-.05-.18c-.06-.05-.14-.03-.21-.02-.09.02-1.49.95-4.22 2.79-.4.27-.76.41-1.08.4-.36-.01-1.04-.2-1.55-.37-.63-.2-1.12-.31-1.08-.66.02-.18.27-.36.74-.55 2.92-1.27 4.86-2.11 5.83-2.51 2.78-1.16 3.35-1.36 3.73-1.36.08 0 .27.02.39.12.1.08.13.19.14.27-.01.06.01.24 0 .24z"/>
-                </svg>
-                انضم لقناتكم في تيليجرام
-            </a>
-            <span class="username">@messi_1</span>
-        </div>
-
-    </div>
-
-    <script>
-        const video = document.getElementById('videoPlayer');
-        // تم تحديث الرابط كما طلبت
-        const videoSrc = 'https://stm.linkip.org/live/1957_.m3u8'; 
-        let hls;
-
-        function initStream() {
-            if (Hls.isSupported()) {
-                if (hls) { hls.destroy(); }
-                hls = new Hls();
-                hls.loadSource(videoSrc);
-                hls.attachMedia(video);
-                hls.on(Hls.Events.MANIFEST_PARSED, function() {
-                    video.play().catch(e => console.log("يحتاج المستخدم للضغط على تشغيل"));
-                });
-                
-                hls.on(Hls.Events.ERROR, function (event, data) {
-                    if (data.fatal) {
-                        document.getElementById('statusText').innerText = "انقطع البث";
-                        document.querySelector('.live-badge').style.background = "rgba(160, 160, 160, 0.2)";
-                        document.querySelector('.live-badge').style.borderColor = "rgba(160, 160, 160, 0.3)";
-                        document.querySelector('.live-badge').style.color = "#a0a0a0";
-                        document.querySelector('.pulse-dot').style.display = "none";
-                    }
-                });
-            }
-            else if (video.canPlayType('application/vnd.apple.mpegurl')) {
-                video.src = videoSrc;
-                video.addEventListener('loadedmetadata', function() {
-                    video.play();
-                });
-            }
-        }
-
-        function reloadStream() {
-            initStream();
-            document.getElementById('statusText').innerText = "مباشر";
-            document.querySelector('.live-badge').style.background = "rgba(255, 59, 48, 0.15)";
-            document.querySelector('.live-badge').style.borderColor = "rgba(255, 59, 48, 0.3)";
-            document.querySelector('.live-badge').style.color = "#ff3b30";
-            document.querySelector('.pulse-dot').style.display = "block";
-        }
-
-        window.onload = initStream;
-    </script>
-</body>
+    </body>
 </html>
