@@ -1,375 +1,57 @@
 <!DOCTYPE html>
-<html lang="ar" dir="rtl">
+<html lang="ar">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>بث قناة الأسطورة ليو ميسي</title>
-    
-    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;700;900&display=swap" rel="stylesheet">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>مشغل البث</title>
+    <!-- استدعاء HLS.js -->
     <script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
-    <script src="https://telegram.org/js/telegram-web-app.js"></script>
-
     <style>
-        body {
-            background-color: #05070a;
-            color: #ffffff;
-            font-family: 'Cairo', sans-serif;
-            margin: 0;
-            padding: 10px;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            min-height: 100vh;
-            background-image: 
-                radial-gradient(circle at 15% 10%, rgba(116, 172, 223, 0.1), transparent 30%),
-                radial-gradient(circle at 85% 90%, rgba(212, 175, 55, 0.05), transparent 30%);
-        }
-
-        .premium-container {
-            width: 100%;
-            max-width: 900px;
-            background: rgba(255, 255, 255, 0.02);
-            border: 1px solid rgba(255, 255, 255, 0.05);
-            border-radius: 20px;
-            padding: 15px;
-            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.6);
-            margin-top: 10px;
-        }
-
-        .header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 15px;
-            padding-bottom: 15px;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
-        }
-
-        .title-wrapper h1 {
-            font-size: 1.3rem;
-            font-weight: 900;
-            margin: 0 0 5px 0;
-            background: linear-gradient(135deg, #74acdf, #ffffff);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-        }
-
-        .title-wrapper p {
-            margin: 0;
-            font-size: 0.85rem;
-            color: #888;
-        }
-
-        .header-actions {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-
-        .refresh-btn {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            background: rgba(116, 172, 223, 0.15);
-            border: 1px solid rgba(116, 172, 223, 0.3);
-            color: #74acdf;
-            padding: 5px 10px;
-            border-radius: 50px;
-            font-family: 'Cairo', sans-serif;
-            font-size: 0.8rem;
-            font-weight: 900;
-            cursor: pointer;
-            outline: none;
-        }
-
-        .refresh-btn.spinning svg {
-            animation: spin 1s linear infinite;
-        }
-
-        @keyframes spin {
-            100% { transform: rotate(-360deg); }
-        }
-
-        .live-badge {
-            display: flex;
-            align-items: center;
-            background: rgba(255, 59, 48, 0.15);
-            border: 1px solid rgba(255, 59, 48, 0.4);
-            color: #ff453a;
-            padding: 5px 12px;
-            border-radius: 50px;
-            font-size: 0.8rem;
-            font-weight: 900;
-        }
-
-        .pulse-dot {
-            width: 6px;
-            height: 6px;
-            background: #ff453a;
-            border-radius: 50%;
-            margin-left: 6px;
-            box-shadow: 0 0 8px #ff453a;
-            animation: pulse 1s infinite alternate;
-        }
-
-        @keyframes pulse {
-            0% { transform: scale(0.9); opacity: 0.7; }
-            100% { transform: scale(1.3); opacity: 1; }
-        }
-
-        /* حاوية الفيديو المحدثة */
-        .video-wrapper {
-            width: 100%;
-            border-radius: 15px;
-            overflow: hidden;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.8);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            background: #000;
-            position: relative;
-            aspect-ratio: 16/9;
-        }
-
-        /* تنسيق مشغل HTML5 الأصلي */
-        video {
-            width: 100%;
-            height: 100%;
-            object-fit: contain;
-            outline: none;
-        }
-
-        /* زر التكبير المخصص */
-        .custom-fullscreen-btn {
-            position: absolute;
-            bottom: 15px;
-            left: 15px;
-            background: rgba(0, 0, 0, 0.6);
-            border: 1px solid rgba(255,255,255,0.2);
-            color: white;
-            padding: 8px 12px;
-            border-radius: 8px;
-            cursor: pointer;
-            z-index: 10;
-            font-family: 'Cairo', sans-serif;
-            font-size: 0.8rem;
-        }
-
-        .css-fullscreen {
-            position: fixed !important;
-            top: 0 !important;
-            left: 0 !important;
-            right: 0 !important;
-            bottom: 0 !important;
-            width: 100vw !important;
-            height: 100vh !important;
-            max-width: 100% !important;
-            z-index: 999999 !important;
-            border-radius: 0 !important;
-            border: none !important;
-            background-color: #000 !important;
-            margin: 0 !important;
-            padding: 0 !important;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-
-        .rights-banner {
-            display: block;
-            background: linear-gradient(90deg, rgba(116, 172, 223, 0.1) 0%, rgba(255, 255, 255, 0.05) 100%);
-            border: 1px solid rgba(116, 172, 223, 0.3);
-            color: #ffffff;
-            text-decoration: none;
-            text-align: center;
-            padding: 12px;
-            border-radius: 12px;
-            margin-top: 15px;
-            font-weight: 900;
-            font-size: 0.95rem;
-        }
-
-        .rights-banner span {
-            color: #74acdf;
-        }
-
-        .footer {
-            margin-top: 20px;
-            text-align: center;
-            width: 100%;
-        }
-
-        .tg-btn {
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            background: linear-gradient(135deg, #2AABEE 0%, #229ED9 100%);
-            color: #ffffff;
-            text-decoration: none;
-            padding: 14px 35px;
-            border-radius: 16px;
-            font-size: 1.05rem;
-            font-weight: 900;
-            width: 100%;
-            max-width: 350px;
-            box-sizing: border-box;
-        }
-
-        .tg-btn svg {
-            width: 22px;
-            height: 22px;
-            fill: #ffffff;
-            margin-left: 10px;
-        }
-
-        /* رسالة حالة البث */
-        #statusMessage {
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            color: #ff453a;
-            font-weight: bold;
-            background: rgba(0,0,0,0.8);
-            padding: 10px 20px;
-            border-radius: 10px;
-            display: none;
-            z-index: 5;
-            text-align: center;
-        }
+        body { margin: 0; background: #000; display: flex; align-items: center; justify-content: center; height: 100vh; color: white; font-family: sans-serif; }
+        #video { width: 100%; max-width: 800px; height: auto; }
+        #error-log { position: absolute; top: 10px; color: red; background: rgba(0,0,0,0.8); padding: 10px; }
     </style>
 </head>
 <body>
 
-    <div class="premium-container">
-        <div class="header">
-            <div class="title-wrapper">
-                <h1>تغطية الأسطورة ميسي</h1>
-                <p>الأرجنتين 🇦🇷 ضد الرأس الأخضر 🇨🇻</p>
-            </div>
-            
-            <div class="header-actions">
-                <button id="refreshBtn" class="refresh-btn">
-                    <svg viewBox="0 0 24 24" width="14" height="14" style="margin-left:5px; fill:#74acdf;">
-                        <path d="M17.65 6.35A7.95 7.95 0 0012 4c-4.42 0-7.99 3.58-7.99 8s3.57 8 7.99 8c3.73 0 6.84-2.55 7.73-6h-2.08A5.99 5.99 0 0112 18c-3.31 0-6-2.69-6-6s2.69-6 6-6c1.66 0 3.14.69 4.22 1.78L13 11h7V4l-2.35 2.35z"/>
-                    </svg>
-                    تحديث
-                </button>
-
-                <div class="live-badge">
-                    <div class="pulse-dot"></div>
-                    <span>مباشر</span>
-                </div>
-            </div>
-        </div>
-
-        <div class="video-wrapper" id="videoContainer">
-            <div id="statusMessage">جاري كسر الحماية وتشغيل البث...</div>
-            <video id="my-video" controls playsinline webkit-playsinline></video>
-            <button class="custom-fullscreen-btn" id="fsToggle">تكبير الشاشة ⛶</button>
-        </div>
-
-        <a href="https://t.me/messi_1" target="_blank" class="rights-banner">
-            👑 بث قناة الأسطورة ليو ميسي | <span>انضم للقناة من هنا</span>
-        </a>
-
-        <div class="footer">
-            <a href="https://t.me/messi_1" target="_blank" class="tg-btn">
-                <svg viewBox="0 0 24 24">
-                    <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm4.64 6.8c-.15 1.58-.8 5.42-1.13 7.19-.14.75-.42 1-.68 1.03-.58.05-1.02-.38-1.58-.75-.88-.58-1.38-.94-2.23-1.5-.99-.65-.35-1.01.22-1.59.15-.15 2.71-2.48 2.76-2.69a.2.2 0 00-.05-.18c-.06-.05-.14-.03-.21-.02-.09.02-1.49.95-4.22 2.79-.4.27-.76.41-1.08.4-.36-.01-1.04-.2-1.55-.37-.63-.2-1.12-.31-1.08-.66.02-.18.27-.36.74-.55 2.92-1.27 4.86-2.11 5.83-2.51 2.78-1.16 3.35-1.36 3.73-1.36.08 0 .27.02.39.12.1.08.13.19.14.27-.01.06.01.24 0 .24z"/>
-                </svg>
-                تغطية حصرية @messi_1
-            </a>
-        </div>
-    </div>
+    <div id="error-log">جاري التحميل...</div>
+    <video id="video" controls playsinline></video>
 
     <script>
-        if (window.Telegram && window.Telegram.WebApp) {
-            window.Telegram.WebApp.expand();
+        const video = document.getElementById('video');
+        const log = document.getElementById('error-log');
+        const videoSrc = "https://stm.linkip.org/live/1956_.m3u8";
+
+        function showError(msg) {
+            log.innerText = "خطأ: " + msg;
+            console.error(msg);
         }
 
-        // الرابط الجديد
-        const originalUrl = "https://stm.linkip.org/live/1956_.m3u8";
-        
-        // خادم وسيط (Proxy) لكسر حماية CORS
-        const proxyUrl = "https://corsproxy.io/?url=" + encodeURIComponent(originalUrl);
-        
-        const video = document.getElementById('my-video');
-        const statusMsg = document.getElementById('statusMessage');
-        let hlsPlayer = null;
-
-        function loadVideo(useProxy = false) {
-            const streamUrl = useProxy ? proxyUrl : originalUrl;
-            statusMsg.style.display = useProxy ? 'block' : 'none';
-
-            if (Hls.isSupported()) {
-                if (hlsPlayer) { hlsPlayer.destroy(); }
-                
-                hlsPlayer = new Hls({
-                    debug: false,
-                    enableWorker: true,
-                    lowLatencyMode: true
-                });
-
-                hlsPlayer.loadSource(streamUrl);
-                hlsPlayer.attachMedia(video);
-                
-                hlsPlayer.on(Hls.Events.MANIFEST_PARSED, function() {
-                    statusMsg.style.display = 'none';
-                    video.play().catch(() => console.log("يحتاج تفاعل المستخدم للتشغيل"));
-                });
-
-                // إذا فشل الرابط الأصلي، قم بتشغيل البروكسي تلقائياً
-                hlsPlayer.on(Hls.Events.ERROR, function(event, data) {
-                    if (data.fatal) {
-                        if (!useProxy) {
-                            console.log("حظر CORS مكتشف، جاري التحويل للبروكسي...");
-                            loadVideo(true);
-                        } else {
-                            statusMsg.innerText = "الرابط منتهي الصلاحية أو محمي برقم IP محدد.";
-                            statusMsg.style.display = 'block';
-                        }
-                    }
-                });
-            } 
-            // دعم أجهزة الآيفون (iOS Safari)
-            else if (video.canPlayType('application/vnd.apple.mpegurl')) {
-                video.src = streamUrl;
-                video.addEventListener('loadedmetadata', function() {
-                    video.play();
-                });
-                video.addEventListener('error', function() {
-                    if (!useProxy) { loadVideo(true); }
-                });
-            }
-        }
-
-        // تشغيل البث عند فتح الصفحة
-        loadVideo(false);
-
-        // برمجة زر التحديث
-        const refreshBtn = document.getElementById('refreshBtn');
-        refreshBtn.addEventListener('click', function() {
-            refreshBtn.classList.add('spinning');
-            loadVideo(false);
-            setTimeout(() => refreshBtn.classList.remove('spinning'), 1000);
-        });
-
-        // برمجة زر التكبير الإجباري
-        const fsToggle = document.getElementById('fsToggle');
-        fsToggle.addEventListener('click', function() {
-            const container = document.getElementById('videoContainer');
-            container.classList.toggle('css-fullscreen');
+        if (Hls.isSupported()) {
+            const hls = new Hls();
+            hls.loadSource(videoSrc);
+            hls.attachMedia(video);
             
-            if (container.classList.contains('css-fullscreen')) {
-                document.body.style.overflow = 'hidden';
-                fsToggle.innerText = "تصغير الشاشة ✖";
-                if (window.Telegram && window.Telegram.WebApp) {
-                    window.Telegram.WebApp.expand();
+            hls.on(Hls.Events.MANIFEST_PARSED, function() {
+                log.style.display = 'none';
+                video.play().catch(e => showError("يتطلب تفاعل للتشغيل التلقائي"));
+            });
+
+            hls.on(Hls.Events.ERROR, function(event, data) {
+                if (data.fatal) {
+                    showError("مشكلة في الاتصال بالسيرفر: " + data.type);
                 }
-            } else {
-                document.body.style.overflow = '';
-                fsToggle.innerText = "تكبير الشاشة ⛶";
-            }
-        });
+            });
+        }
+        else if (video.canPlayType('application/vnd.apple.mpegurl')) {
+            video.src = videoSrc;
+            video.addEventListener('loadedmetadata', () => {
+                log.style.display = 'none';
+                video.play();
+            });
+        } else {
+            showError("متصفحك لا يدعم هذا النوع من البث");
+        }
     </script>
 </body>
 </html>
