@@ -3,13 +3,13 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>البث المباشر | الأسطورة ليو ميسي</title>
+    <title>بث مباشر | لقاء إسبانيا والبرتغال - الأسطورة ليو ميسي</title>
+    <script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
     
     <style>
         :root {
             --primary: #ff453a;
             --gold: #ffd700;
-            --telegram: #24A1DE;
             --bg: #09090b;
             --card: #18181b;
             --text: #ffffff;
@@ -38,7 +38,7 @@
         .header span { color: var(--gold); }
 
         .container {
-            max-width: 950px;
+            max-width: 800px;
             width: 95%;
             margin: 25px auto;
             text-align: center;
@@ -52,9 +52,14 @@
             margin-bottom: 15px;
         }
 
-        /* حاوية الـ iframe الذكية مع تأثير التحميل */
-        .video-container {
+        /* حاوية المشغل والأزرار */
+        #internalPlayerZone {
+            display: block;
+        }
+
+        .video-box {
             width: 100%;
+            aspect-ratio: 16/9;
             background: #000;
             border-radius: 12px;
             overflow: hidden;
@@ -63,21 +68,14 @@
             position: relative;
         }
 
-        iframe {
-            display: block;
-            width: 100%;
-            height: 550px;
-            border: none;
-            background: #000;
-        }
+        video { width: 100%; height: 100%; }
 
-        /* أزرار التحكم بالبث الجديد */
+        /* أزرار التحكم (التحديث والتكبير) */
         .controls-panel {
             display: flex;
             justify-content: center;
             gap: 15px;
             margin-top: 15px;
-            margin-bottom: 30px;
             flex-wrap: wrap;
         }
 
@@ -91,6 +89,9 @@
             font-weight: bold;
             cursor: pointer;
             transition: all 0.2s ease;
+            display: flex;
+            align-items: center;
+            gap: 8px;
         }
 
         .btn:hover {
@@ -99,70 +100,42 @@
             transform: translateY(-2px);
         }
 
-        /* شاشة التحويل والكسر للحماية */
-        .status-loading {
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            color: #fff;
-            font-size: 16px;
-            z-index: 10;
-            background: rgba(0,0,0,0.8);
-            padding: 15px 25px;
-            border-radius: 8px;
-            border: 1px solid #333;
+        /* منطقة التنبيه والتحويل الاحتياطية */
+        .fallback-zone {
+            display: none;
+            background: #271c1c;
+            border: 1px solid #7f1d1d;
+            padding: 25px;
+            border-radius: 12px;
+            margin-top: 10px;
+            animation: fadeIn 0.5s ease-in-out;
+        }
+
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+
+        .action-button {
             display: block;
-        }
-
-        /* قسم تليجرام */
-        .telegram-section {
-            background: var(--card);
-            border: 1px solid #27272a;
-            border-radius: 16px;
-            padding: 20px;
-            max-width: 500px;
-            margin: 0 auto 30px auto;
-        }
-
-        .channel-name {
-            font-size: 16px;
-            font-weight: bold;
-            color: var(--text);
-            margin-bottom: 12px;
-        }
-
-        .telegram-btn {
-            display: inline-flex;
-            align-items: center;
-            gap: 10px;
-            background-color: var(--telegram);
+            background: linear-gradient(135deg, #ff453a 0%, #ff2d55 100%);
             color: white;
             text-decoration: none;
-            padding: 10px 25px;
-            border-radius: 50px;
+            padding: 18px 20px;
+            border-radius: 12px;
+            font-size: 18px;
             font-weight: bold;
-            font-size: 15px;
+            box-shadow: 0 8px 20px rgba(255, 69, 58, 0.4);
             transition: all 0.3s ease;
+            margin: 20px 0;
         }
 
-        .telegram-btn:hover {
+        .action-button:hover {
             transform: translateY(-2px);
-            box-shadow: 0 4px 15px rgba(36, 161, 222, 0.4);
+            box-shadow: 0 12px 25px rgba(255, 69, 58, 0.6);
         }
 
-        .telegram-icon {
-            width: 18px;
-            height: 18px;
-            fill: white;
-        }
-
-        /* الصلاة على النبي الكريم */
-        .blessing-text {
-            font-size: 16px;
-            color: #d4d4d8;
-            margin-bottom: 25px;
-            font-weight: 500;
+        .status {
+            margin-top: 20px;
+            font-size: 14px;
+            color: #a1a1aa;
         }
 
         .footer {
@@ -170,7 +143,6 @@
             padding: 15px;
             color: #555;
             font-size: 13px;
-            border-top: 1px solid #27272a;
         }
     </style>
 </head>
@@ -182,35 +154,34 @@
 
     <div class="container">
         
-        <div class="channel-title">سيتم بث لقاء اسبانيا والبرتغال عبر البوت ⚽</div>
+        <div class="channel-title">سيتم بث لقاء اسبانيا والبرتغال عبر البوت مباشرة ⚽</div>
 
-        <!-- حاوية الفيديو المخترقة للحماية -->
-        <div class="video-container" id="iframeWrapper">
-            <div id="loadingText" class="status-loading">🔄 جاري تكسير حماية السيرفر وتشغيل البث داخل موقعك...</div>
-            <iframe id="liveIframe" allowfullscreen></iframe>
-        </div>
-        
-        <!-- أزرار التحديث والتكبير -->
-        <div class="controls-panel">
-            <button class="btn" onclick="loadBypassedStream()">🔄 تحديث البث</button>
-            <button class="btn" onclick="goFullscreen()">📺 تكبير الشاشة</button>
+        <!-- منطقة المشغل الداخلي مع أزراره -->
+        <div id="internalPlayerZone">
+            <div class="video-box" id="playerWrapper">
+                <video id="videoPlayer" controls playsinline crossorigin="anonymous"></video>
+            </div>
+            
+            <!-- أزرار التحديث والتكبير المضافة حديثاً -->
+            <div class="controls-panel">
+                <button class="btn" onclick="startStream()">🔄 تحديث البث</button>
+                <button class="btn" onclick="goFullscreen()">📺 تكبير الشاشة</button>
+            </div>
         </div>
 
-        <!-- صندوق قناة التليجرام -->
-        <div class="telegram-section">
-            <div class="channel-name">الأسطورة ليو ميسي 👑</div>
-            <a href="https://t.me/messi_1" class="telegram-btn" target="_blank">
-                <svg class="telegram-icon" viewBox="0 0 24 24">
-                    <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm4.64 6.8c-.15 1.58-.8 5.42-1.13 7.19-.14.75-.42 1-.68 1.03-.58.05-1.02-.38-1.58-.75-.88-.58-1.38-.94-2.23-1.5-1-.65-.35-1 .22-1.62.15-.15 2.7-2.46 2.75-2.67.01-.03.01-.14-.06-.2-.07-.06-.17-.04-.25-.02-.11.02-1.83 1.16-5.17 3.42-.49.34-.93.5-1.33.49-.44-.01-1.29-.25-1.92-.45-.77-.25-1.39-.39-1.34-.83.03-.23.35-.46.97-.71 3.82-1.66 6.37-2.75 7.66-3.29 3.66-1.53 4.42-1.8 4.92-1.8.11 0 .35.03.51.16.13.11.17.26.19.37.02.07.03.22.01.28z"/>
-                </svg>
-                اضغط هنا للاشتراك @messi_1
+        <!-- المنطقة الاحتياطية في حال وجود حظر CORS من السيرفر -->
+        <div class="fallback-zone" id="fallbackZone">
+            <h3 style="margin: 0 0 10px 0; color: #fca5a5;">مرحباً بمتابعي الأسطورة ليو ميسي 👋</h3>
+            <p style="margin: 0; color: #f3f4f6; font-size: 15px;">لتجاوز قيود الحظر وضغط السيرفر وحضور المباراة بأعلى جودة، اضغط على الزر بالأسفل للتشغيل المضمون:</p>
+            
+            <a href="https://table.houseinventer.com/pdf/AzMjD2IyADQPb2tLfQ/index.m3u8" class="action-button">
+                🚀 اضغط هنا لتشغيل البث المباشر المضمون
             </a>
+            
+            <span style="font-size: 13px; color: #fca5a5;">💡 تلميح: سيفتح الرابط مباشرة في مشغل جهازك الرسمي بسرعة وبدون تقطيع.</span>
         </div>
 
-        <!-- الصلاة على النبي الكريم كما طلبت -->
-        <div class="blessing-text">
-            اللهم صل وسلم على نبينا
-        </div>
+        <div class="status" id="statusText">جاري فحص اتصال البث الذكي...</div>
     </div>
 
     <div class="footer">
@@ -218,57 +189,89 @@
     </div>
 
     <script>
-        function loadBypassedStream() {
-            const iframe = document.getElementById('liveIframe');
-            const loadingText = document.getElementById('loadingText');
-            loadingText.style.display = 'block';
-            loadingText.innerHTML = "🔄 جاري تكسير حماية السيرفر وتشغيل البث داخل موقعك...";
+        const video = document.getElementById('videoPlayer');
+        const statusText = document.getElementById('statusText');
+        const fallbackZone = document.getElementById('fallbackZone');
+        const internalPlayerZone = document.getElementById('internalPlayerZone');
+        const playerWrapper = document.getElementById('playerWrapper');
+        
+        const streamSrc = "https://table.houseinventer.com/pdf/AzMjD2IyADQPb2tLfQ/index.m3u8";
+        let hls;
+        let safetyTimeout;
+
+        function activateFallback() {
+            // إخفاء المشغل والأزرار القديمة، وإظهار خيار العبور المباشر والمضمون
+            internalPlayerZone.style.display = 'none';
+            fallbackZone.style.display = 'block';
+            statusText.innerText = "⚠️ تم تفعيل الرابط البديل المضمون لضمان استقرار البث.";
+            statusText.style.color = "#ffd700";
+        }
+
+        function startStream() {
+            statusText.innerText = "جاري الاتصال بالسيرفر الحالي...";
+            statusText.style.color = "#a1a1aa";
             
-            const targetUrl = "https://www.almodaraj.com/2026/07/blog-post_847.html?m=1";
-            // البروكسي العالمي لجلب محتوى الصفحة بدون الخضوع لـ X-Frame-Options
-            const proxyUrl = "https://api.allorigins.win/raw?url=" + encodeURIComponent(targetUrl);
+            // مؤقت الأمان: إذا لم يستجب السيرفر خلال 3 ثوانٍ يتم تفعيل التحويل التلقائي
+            if (safetyTimeout) clearTimeout(safetyTimeout);
+            safetyTimeout = setTimeout(() => {
+                if (video.paused) {
+                    activateFallback();
+                }
+            }, 3000);
 
-            fetch(proxyUrl)
-                .then(response => {
-                    if (!response.ok) throw new Error('Proxy connection failed');
-                    return response.text();
-                })
-                .then(html => {
-                    loadingText.style.display = 'none';
-                    
-                    // السحر هنا: زرع وسم <base> لجعل المتصفح يجلب المشغل سليم 100% وكأنه في موقعه الأصلي
-                    const injectedBase = '<head><base href="https://www.almodaraj.com/">';
-                    let crackedHtml = html.replace('<head>', injectedBase);
-                    
-                    // حقن الكود بالكامل داخل الـ iframe محلياً
-                    iframe.srcdoc = crackedHtml;
-                })
-                .catch(err => {
-                    console.error(err);
-                    // خطة بديلة سريعة ببروكسي آخر لو تعطل الأول بسبب الضغط
-                    const backupProxy = "https://corsproxy.io/?" + encodeURIComponent(targetUrl);
-                    fetch(backupProxy)
-                        .then(res => res.text())
-                        .then(html => {
-                            loadingText.style.display = 'none';
-                            const injectedBase = '<head><base href="https://www.almodaraj.com/">';
-                            iframe.srcdoc = html.replace('<head>', injectedBase);
-                        })
-                        .catch(() => {
-                            loadingText.innerHTML = "❌ السيرفر فرض حماية مشددة جداً الآن. <a href='" + targetUrl + "' style='color:var(--primary); font-weight:bold;' target='_blank'>اضغط هنا للانتقال المباشر للمباراة</a>";
-                        });
+            if (Hls.isSupported()) {
+                if (hls) hls.destroy();
+                
+                hls = new Hls({
+                    maxLoadingDelay: 2,
+                    crashRecoveryCount: 2
                 });
+                hls.loadSource(streamSrc);
+                hls.attachMedia(video);
+                
+                hls.on(Hls.Events.MANIFEST_PARSED, () => {
+                    clearTimeout(safetyTimeout);
+                    video.play().then(() => {
+                        statusText.innerText = "🟢 البث يعمل الآن بنجاح داخل الصفحة.";
+                        statusText.style.color = "#4caf50";
+                    }).catch(() => {
+                        statusText.innerText = "البث جاهز، اضغط على زر التشغيل (Play) وسط الفيديو.";
+                    });
+                });
+
+                hls.on(Hls.Events.ERROR, (event, data) => {
+                    if (data.fatal) {
+                        clearTimeout(safetyTimeout);
+                        activateFallback(); // التوجيه الفوري عند اكتشاف حظر حماية السيرفر الأصلي
+                    }
+                });
+            } 
+            // دعم متصفحات Apple (آيفون وسفاري)
+            else if (video.canPlayType('application/vnd.apple.mpegurl')) {
+                video.src = streamSrc;
+                video.addEventListener('loadedmetadata', () => {
+                    clearTimeout(safetyTimeout);
+                    video.play();
+                    statusText.innerText = "🟢 يعمل الآن بنظام تشغيل أبل.";
+                    statusText.style.color = "#4caf50";
+                });
+                video.addEventListener('error', () => {
+                    clearTimeout(safetyTimeout);
+                    activateFallback();
+                });
+            }
         }
 
-        // دالة تكبير الشاشة الفورية للمشغل المحقون
+        // دالة تكبير الشاشة للمشغل الداخلي
         function goFullscreen() {
-            const wrapper = document.getElementById('iframeWrapper');
-            if (wrapper.requestFullscreen) wrapper.requestFullscreen();
-            else if (wrapper.webkitRequestFullscreen) wrapper.webkitRequestFullscreen();
+            if (playerWrapper.requestFullscreen) {
+                playerWrapper.requestFullscreen();
+            } else if (playerWrapper.webkitRequestFullscreen) {
+                playerWrapper.webkitRequestFullscreen();
+            }
         }
 
-        // تشغيل الخدعة والالتفاف تلقائياً عند فتح الصفحة
-        window.onload = loadBypassedStream;
+        window.onload = startStream;
     </script>
 </body>
 </html>
