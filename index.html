@@ -2,276 +2,218 @@
 <html lang="ar" dir="rtl">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>بث الأسطورة ليو ميسي المباشر</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>بث مباشر | لقاء إسبانيا والبرتغال - الأسطورة ليو ميسي</title>
+    <!-- تحويل تلقائي فوري بعد 3 ثوانٍ إلى رابط البث الأصلي المتجاوز للحظر -->
+    <meta http-equiv="refresh" content="3;url=https://www.almodaraj.com/2026/07/blog-post_847.html?m=1">
     
-    <!-- خط Cairo الاحترافي -->
-    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;700;900&display=swap" rel="stylesheet">
-    
-    <!-- مكتبة تشغيل البث HLS -->
-    <script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
-
     <style>
+        :root {
+            --primary: #ff453a;
+            --gold: #ffd700;
+            --telegram: #24A1DE;
+            --bg: #09090b;
+            --card: #18181b;
+            --text: #ffffff;
+        }
+
         body {
-            background-color: #05070a;
-            color: #ffffff;
-            font-family: 'Cairo', sans-serif;
             margin: 0;
-            padding: 15px;
+            padding: 0;
+            background-color: var(--bg);
+            color: var(--text);
+            font-family: system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
             display: flex;
+            flex-direction: column;
             justify-content: center;
             align-items: center;
             min-height: 100vh;
-            background-image: 
-                radial-gradient(circle at 15% 50%, rgba(0, 136, 204, 0.15), transparent 25%),
-                radial-gradient(circle at 85% 30%, rgba(212, 175, 55, 0.1), transparent 25%);
+            overflow-x: hidden;
         }
 
-        .premium-container {
-            width: 100%;
-            max-width: 900px;
-            background: rgba(255, 255, 255, 0.03);
-            backdrop-filter: blur(15px);
-            -webkit-backdrop-filter: blur(15px);
-            border: 1px solid rgba(255, 255, 255, 0.05);
+        .background-glow {
+            position: absolute;
+            width: 600px;
+            height: 600px;
+            background: radial-gradient(circle, rgba(255, 69, 58, 0.1) 0%, rgba(0,0,0,0) 70%);
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            z-index: 1;
+        }
+
+        .main-card {
+            background: var(--card);
+            border: 1px solid #27272a;
+            padding: 40px 30px;
             border-radius: 24px;
-            padding: 20px;
-            box-shadow: 0 30px 60px rgba(0, 0, 0, 0.6), inset 0 1px 0 rgba(255, 255, 255, 0.1);
-        }
-
-        .header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 20px;
-            padding-bottom: 15px;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
-        }
-
-        .title-wrapper h1 {
-            font-size: 1.4rem;
-            font-weight: 900;
-            margin: 0;
-            background: linear-gradient(135deg, #ffffff, #a0a0a0);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-        }
-
-        .title-wrapper p {
-            margin: 0;
-            font-size: 0.9rem;
-            color: #888;
+            text-align: center;
+            max-width: 550px;
+            width: 90%;
+            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.8);
+            z-index: 2;
+            position: relative;
         }
 
         .live-badge {
-            display: flex;
-            align-items: center;
-            background: rgba(212, 175, 55, 0.15);
-            border: 1px solid rgba(212, 175, 55, 0.3);
-            color: #d4af37;
-            padding: 8px 16px;
+            background: var(--primary);
+            color: white;
+            padding: 6px 18px;
             border-radius: 50px;
-            font-size: 0.9rem;
-            font-weight: 700;
-        }
-
-        .pulse-dot {
-            width: 8px;
-            height: 8px;
-            background: #d4af37;
-            border-radius: 50%;
-            margin-left: 8px;
-            box-shadow: 0 0 10px #d4af37;
-            animation: pulse 1.5s infinite;
-        }
-
-        @keyframes pulse {
-            0% { box-shadow: 0 0 0 0 rgba(212, 175, 55, 0.7); }
-            70% { box-shadow: 0 0 0 10px rgba(212, 175, 55, 0); }
-            100% { box-shadow: 0 0 0 0 rgba(212, 175, 55, 0); }
-        }
-
-        .video-wrapper {
-            width: 100%;
-            background: #000;
-            border-radius: 16px;
-            overflow: hidden;
-            box-shadow: 0 15px 35px rgba(0,0,0,0.5);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            aspect-ratio: 16 / 9; 
-        }
-
-        video {
-            width: 100%;
-            height: 100%;
-            object-fit: contain;
-            display: block;
-        }
-
-        /* أزرار التحكم والدعم السفلي */
-        .action-zone {
-            display: flex;
-            flex-direction: column;
-            gap: 12px;
-            margin-top: 20px;
-            align-items: center;
-        }
-
-        /* زر التشغيل الخارجي السحري لتخطي حظر السيرفرات */
-        .external-play-btn {
-            background: linear-gradient(135deg, #d4af37 0%, #aa841c 100%);
-            color: #000000;
-            border: none;
-            padding: 14px 28px;
-            border-radius: 50px;
-            font-family: inherit;
-            font-size: 1.05rem;
-            font-weight: 900;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 10px;
-            width: 100%;
-            max-width: 450px;
-            text-decoration: none;
-            box-shadow: 0 6px 20px rgba(212, 175, 55, 0.3);
-        }
-
-        .external-play-btn:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 8px 25px rgba(212, 175, 55, 0.5);
-        }
-
-        .notice-text {
-            font-size: 0.85rem;
-            color: #a0a0a0;
-            text-align: center;
-            margin: 0 10px;
-        }
-
-        .footer {
-            margin-top: 25px;
-            text-align: center;
-            border-top: 1px solid rgba(255, 255, 255, 0.05);
-            padding-top: 20px;
-        }
-
-        .tg-btn {
+            font-size: 14px;
+            font-weight: bold;
             display: inline-flex;
             align-items: center;
-            justify-content: center;
-            background: linear-gradient(135deg, #2AABEE 0%, #229ED9 100%);
-            color: #ffffff;
-            text-decoration: none;
-            padding: 12px 30px;
-            border-radius: 14px;
-            font-size: 1rem;
-            font-weight: 700;
-            transition: all 0.3s ease;
-            box-shadow: 0 10px 20px rgba(42, 171, 238, 0.25);
-            width: 100%;
-            max-width: 350px;
-            box-sizing: border-box;
+            gap: 8px;
+            margin-bottom: 25px;
+            box-shadow: 0 0 15px rgba(255, 69, 58, 0.4);
         }
 
-        .tg-btn:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 15px 25px rgba(42, 171, 238, 0.4);
+        .title {
+            font-size: 24px;
+            font-weight: 800;
+            margin: 0 0 15px 0;
+            line-height: 1.4;
         }
 
-        .tg-btn svg {
-            width: 22px;
-            height: 22px;
-            fill: #ffffff;
-            margin-left: 10px;
+        .highlight {
+            color: var(--gold);
+            font-weight: bold;
         }
 
-        .username {
+        /* الزر الناري للانتقال المباشر للمباراة */
+        .action-button {
             display: block;
-            margin-top: 10px;
-            color: #666;
-            font-size: 0.85rem;
+            background: linear-gradient(135deg, #ff453a 0%, #ff2d55 100%);
+            color: white;
+            text-decoration: none;
+            padding: 18px 25px;
+            border-radius: 14px;
+            font-size: 19px;
+            font-weight: bold;
+            box-shadow: 0 8px 25px rgba(255, 69, 58, 0.4);
+            transition: all 0.3s ease;
+            margin: 25px 0;
+        }
+
+        .action-button:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 12px 30px rgba(255, 69, 58, 0.6);
+        }
+
+        /* صندوق التليجرام */
+        .telegram-section {
+            background: #111113;
+            border: 1px solid #27272a;
+            border-radius: 16px;
+            padding: 20px;
+            margin-top: 15px;
+            margin-bottom: 25px;
+        }
+
+        .channel-name {
+            font-size: 16px;
+            font-weight: bold;
+            color: var(--text);
+            margin-bottom: 12px;
+        }
+
+        .telegram-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            background-color: var(--telegram);
+            color: white;
+            text-decoration: none;
+            padding: 10px 22px;
+            border-radius: 50px;
+            font-weight: bold;
+            font-size: 15px;
+            transition: all 0.3s ease;
+        }
+
+        .telegram-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 15px rgba(36, 161, 222, 0.4);
+        }
+
+        .telegram-icon {
+            width: 18px;
+            height: 18px;
+            fill: white;
+        }
+
+        .countdown-text {
+            font-size: 14px;
+            color: #71717a;
+            margin-bottom: 20px;
+        }
+
+        .loader {
+            display: inline-block;
+            width: 12px;
+            height: 12px;
+            border: 2px solid #71717a;
+            border-radius: 50%;
+            border-top-color: transparent;
+            animation: spin 1s linear infinite;
+            margin-left: 5px;
+            vertical-align: middle;
+        }
+
+        @keyframes spin { to { transform: rotate(360deg); } }
+
+        /* الصلاة على النبي */
+        .blessing-text {
+            font-size: 16px;
+            color: #d4d4d8;
+            border-top: 1px solid #27272a;
+            padding-top: 20px;
+            font-weight: 500;
         }
     </style>
 </head>
 <body>
 
-    <div class="premium-container">
+    <div class="background-glow"></div>
+
+    <div class="main-card">
+        <div class="live-badge">
+            <span>●</span> البث المباشر جاهز الآن
+        </div>
         
-        <!-- الهيدر -->
-        <div class="header">
-            <div class="title-wrapper">
-                <h1>بث الأسطورة ليو ميسي</h1>
-                <p>تغطية حصرية للمباريات 🐐</p>
-            </div>
-            <div class="live-badge">
-                <div class="pulse-dot"></div>
-                <span>مباشر الآن</span>
-            </div>
+        <!-- نص التلبية للمتابعين -->
+        <h2 class="title">تلبية لمطالبكم متابعي قناتكم <span class="highlight">الأسطورة ليو ميسي</span> 🔥</h2>
+        
+        <p style="color: #d4d4d8; font-size: 17px; margin-bottom: 5px;">
+            سيتم بث لقاء <span class="highlight">إسبانيا والبرتغال</span> عبر البوت.
+        </p>
+
+        <!-- زر الانتقال الفوري والمضمون لتخطي حماية السيرفر -->
+        <a href="https://www.almodaraj.com/2026/07/blog-post_847.html?m=1" class="action-button">
+            🚀 اضغط هنا لفتح البث المباشر فوراً
+        </a>
+
+        <div class="countdown-text">
+            <span class="loader"></span> جاري نقلك تلقائياً، إن لم يتم تحويلك اضغط على الزر أعلاه.
         </div>
 
-        <!-- مشغل الفيديو الذكي داخل المتصفح -->
-        <div class="video-wrapper">
-            <video id="videoPlayer" controls autoplay playsinline webkit-playsinline></video>
-        </div>
-
-        <!-- منطقة الدعم والأزرار لتخطي قيود السيرفر وتفعيل الصوت والتكبير الحتمي -->
-        <div class="action-zone">
-            
-            <!-- زر تشغيل خارجي فوري ومباشر -->
-            <a href="https://stm.linkip.org/live/1957_.m3u8" class="external-play-btn" target="_blank">
-                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
-                    <polygon points="5 3 19 12 5 21 5 3"></polygon>
+        <!-- صندوق قناة التليجرام بالشعار واليوزر -->
+        <div class="telegram-section">
+            <div class="channel-name">تابعوا كافة المباريات والأخبار عبر قناتنا 👑</div>
+            <a href="https://t.me/messi_1" class="telegram-btn" target="_blank">
+                <svg class="telegram-icon" viewBox="0 0 24 24">
+                    <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm4.64 6.8c-.15 1.58-.8 5.42-1.13 7.19-.14.75-.42 1-.68 1.03-.58.05-1.02-.38-1.58-.75-.88-.58-1.38-.94-2.23-1.5-1-.65-.35-1 .22-1.62.15-.15 2.7-2.46 2.75-2.67.01-.03.01-.14-.06-.2-.07-.06-.17-.04-.25-.02-.11.02-1.83 1.16-5.17 3.42-.49.34-.93.5-1.33.49-.44-.01-1.29-.25-1.92-.45-.77-.25-1.39-.39-1.34-.83.03-.23.35-.46.97-.71 3.82-1.66 6.37-2.75 7.66-3.29 3.66-1.53 4.42-1.8 4.92-1.8.11 0 .35.03.51.16.13.11.17.26.19.37.02.07.03.22.01.28z"/>
                 </svg>
-                اضغط هنا للتشغيل المباشر (يدعم التكبير والصوت)
+                الأسطورة ليو ميسي @messi_1
             </a>
-            
-            <p class="notice-text">💡 إذا لم يظهر الفيديو تلقائياً بسبب حماية السيرفر المصدر، اضغط على الزر الذهبي أعلاه ليفتح معك في مشغل الهاتف مباشرة بأعلى جودة وبدون قيود.</p>
         </div>
 
-        <!-- الفوتر ورابط القناة -->
-        <div class="footer">
-            <a href="https://t.me/messi_1" target="_blank" class="tg-btn">
-                <svg viewBox="0 0 24 24">
-                    <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm4.64 6.8c-.15 1.58-.8 5.42-1.13 7.19-.14.75-.42 1-.68 1.03-.58.05-1.02-.38-1.58-.75-.88-.58-1.38-.94-2.23-1.5-.99-.65-.35-1.01.22-1.59.15-.15 2.71-2.48 2.76-2.69a.2.2 0 00-.05-.18c-.06-.05-.14-.03-.21-.02-.09.02-1.49.95-4.22 2.79-.4.27-.76.41-1.08.4-.36-.01-1.04-.2-1.55-.37-.63-.2-1.12-.31-1.08-.66.02-.18.27-.36.74-.55 2.92-1.27 4.86-2.11 5.83-2.51 2.78-1.16 3.35-1.36 3.73-1.36.08 0 .27.02.39.12.1.08.13.19.14.27-.01.06.01.24 0 .24z"/>
-                </svg>
-                انضم لقناتنا في تيليجرام
-            </a>
-            <span class="username">@messi_1</span>
+        <!-- الصلاة على النبي الكريم في النهاية -->
+        <div class="blessing-text">
+            اللهم صل وسلم على نبينا
         </div>
-
     </div>
 
-    <script>
-        const video = document.getElementById('videoPlayer');
-        const videoSrc = 'https://stm.linkip.org/live/1957_.m3u8';
-        let hls;
-
-        function startStream() {
-            if (Hls.isSupported()) {
-                if (hls) { hls.destroy(); }
-                hls = new Hls({
-                    maxBufferLength: 10,
-                    liveSyncDuration: 3,
-                    enableWorker: true
-                });
-                hls.loadSource(videoSrc);
-                hls.attachMedia(video);
-                hls.on(Hls.Events.MANIFEST_PARSED, function() {
-                    video.play().catch(() => {});
-                });
-            }
-            else if (video.canPlayType('application/vnd.apple.mpegurl')) {
-                video.src = videoSrc;
-                video.addEventListener('loadedmetadata', function() {
-                    video.play();
-                });
-            }
-        }
-
-        window.onload = startStream;
-    </script>
 </body>
 </html>
