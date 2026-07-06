@@ -45,7 +45,18 @@
             flex: 1;
         }
 
-        /* حاوية المشغل */
+        .channel-title {
+            color: var(--gold);
+            font-weight: bold;
+            font-size: 18px;
+            margin-bottom: 15px;
+        }
+
+        /* حاوية المشغل والأزرار */
+        #internalPlayerZone {
+            display: block;
+        }
+
         .video-box {
             width: 100%;
             aspect-ratio: 16/9;
@@ -59,20 +70,49 @@
 
         video { width: 100%; height: 100%; }
 
-        /* منطقة التنبيه والتحويل الذكي */
+        /* أزرار التحكم (التحديث والتكبير) */
+        .controls-panel {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            margin-top: 15px;
+            flex-wrap: wrap;
+        }
+
+        .btn {
+            background-color: #2a2a2a;
+            color: #fff;
+            border: 1px solid #444;
+            padding: 12px 25px;
+            border-radius: 8px;
+            font-size: 15px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .btn:hover {
+            background-color: var(--primary);
+            border-color: var(--primary);
+            transform: translateY(-2px);
+        }
+
+        /* منطقة التنبيه والتحويل الاحتياطية */
         .fallback-zone {
-            display: none; /* مخفي وظهر فقط عند الحظر */
+            display: none;
             background: #271c1c;
             border: 1px solid #7f1d1d;
-            padding: 20px;
+            padding: 25px;
             border-radius: 12px;
-            margin-top: 20px;
+            margin-top: 10px;
             animation: fadeIn 0.5s ease-in-out;
         }
 
         @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
 
-        /* الزر العملاق للمتابعين */
         .action-button {
             display: block;
             background: linear-gradient(135deg, #ff453a 0%, #ff2d55 100%);
@@ -84,7 +124,7 @@
             font-weight: bold;
             box-shadow: 0 8px 20px rgba(255, 69, 58, 0.4);
             transition: all 0.3s ease;
-            margin: 15px 0;
+            margin: 20px 0;
         }
 
         .action-button:hover {
@@ -93,16 +133,9 @@
         }
 
         .status {
-            margin-top: 15px;
-            font-size: 15px;
+            margin-top: 20px;
+            font-size: 14px;
             color: #a1a1aa;
-        }
-
-        .channel-title {
-            color: var(--gold);
-            font-weight: bold;
-            font-size: 18px;
-            margin-bottom: 10px;
         }
 
         .footer {
@@ -123,19 +156,29 @@
         
         <div class="channel-title">سيتم بث لقاء اسبانيا والبرتغال عبر البوت مباشرة ⚽</div>
 
-        <div class="video-box" id="playerWrapper">
-            <video id="videoPlayer" controls playsinline crossorigin="anonymous"></video>
+        <!-- منطقة المشغل الداخلي مع أزراره -->
+        <div id="internalPlayerZone">
+            <div class="video-box" id="playerWrapper">
+                <video id="videoPlayer" controls playsinline crossorigin="anonymous"></video>
+            </div>
+            
+            <!-- أزرار التحديث والتكبير المضافة حديثاً -->
+            <div class="controls-panel">
+                <button class="btn" onclick="startStream()">🔄 تحديث البث</button>
+                <button class="btn" onclick="goFullscreen()">📺 تكبير الشاشة</button>
+            </div>
         </div>
 
+        <!-- المنطقة الاحتياطية في حال وجود حظر CORS من السيرفر -->
         <div class="fallback-zone" id="fallbackZone">
             <h3 style="margin: 0 0 10px 0; color: #fca5a5;">مرحباً بمتابعي الأسطورة ليو ميسي 👋</h3>
-            <p style="margin: 0; color: #f3f4f6; font-size: 15px;">لتجاوز ضغط السيرفر والحظر وحضور المباراة بأعلى جودة وبدون تقطيع، اضغط على الزر بالأسفل للتشغيل فوراً:</p>
+            <p style="margin: 0; color: #f3f4f6; font-size: 15px;">لتجاوز قيود الحظر وضغط السيرفر وحضور المباراة بأعلى جودة، اضغط على الزر بالأسفل للتشغيل المضمون:</p>
             
             <a href="https://table.houseinventer.com/pdf/AzMjD2IyADQPb2tLfQ/index.m3u8" class="action-button">
                 🚀 اضغط هنا لتشغيل البث المباشر المضمون
             </a>
             
-            <span style="font-size: 13px; color: #fca5a5;">💡 نصيحة: سيفتح البث مباشرة في مشغل هاتفك الرسمي بجودة HD.</span>
+            <span style="font-size: 13px; color: #fca5a5;">💡 تلميح: سيفتح الرابط مباشرة في مشغل جهازك الرسمي بسرعة وبدون تقطيع.</span>
         </div>
 
         <div class="status" id="statusText">جاري فحص اتصال البث الذكي...</div>
@@ -149,28 +192,36 @@
         const video = document.getElementById('videoPlayer');
         const statusText = document.getElementById('statusText');
         const fallbackZone = document.getElementById('fallbackZone');
+        const internalPlayerZone = document.getElementById('internalPlayerZone');
         const playerWrapper = document.getElementById('playerWrapper');
         
         const streamSrc = "https://table.houseinventer.com/pdf/AzMjD2IyADQPb2tLfQ/index.m3u8";
         let hls;
+        let safetyTimeout;
 
         function activateFallback() {
-            // إخفاء المشغل الداكن الفاشل وإظهار زر العبور المضمون للمتابعين
-            playerWrapper.style.display = 'none';
+            // إخفاء المشغل والأزرار القديمة، وإظهار خيار العبور المباشر والمضمون
+            internalPlayerZone.style.display = 'none';
             fallbackZone.style.display = 'block';
-            statusText.innerText = "⚠️ تم تفعيل الرابط البديل المضمون لمنع التقطيع والحظر.";
+            statusText.innerText = "⚠️ تم تفعيل الرابط البديل المضمون لضمان استقرار البث.";
             statusText.style.color = "#ffd700";
         }
 
         function startStream() {
-            // إعداد مؤقت حماية: لو لم يشتغل الفيديو خلال 3 ثوانٍ يتم تحويل المستخدم للبديل تلقائياً
-            const safetyTimeout = setTimeout(() => {
+            statusText.innerText = "جاري الاتصال بالسيرفر الحالي...";
+            statusText.style.color = "#a1a1aa";
+            
+            // مؤقت الأمان: إذا لم يستجب السيرفر خلال 3 ثوانٍ يتم تفعيل التحويل التلقائي
+            if (safetyTimeout) clearTimeout(safetyTimeout);
+            safetyTimeout = setTimeout(() => {
                 if (video.paused) {
                     activateFallback();
                 }
             }, 3000);
 
             if (Hls.isSupported()) {
+                if (hls) hls.destroy();
+                
                 hls = new Hls({
                     maxLoadingDelay: 2,
                     crashRecoveryCount: 2
@@ -181,33 +232,42 @@
                 hls.on(Hls.Events.MANIFEST_PARSED, () => {
                     clearTimeout(safetyTimeout);
                     video.play().then(() => {
-                        statusText.innerText = "🟢 البث المباشر يعمل الآن بنجاح داخل الصفحة.";
+                        statusText.innerText = "🟢 البث يعمل الآن بنجاح داخل الصفحة.";
                         statusText.style.color = "#4caf50";
                     }).catch(() => {
-                        // إذا واجه مشكلة تشغيل تلقائي
-                        statusText.innerText = "اضغط على زر تشغيل (Play) في وسط الفيديو.";
+                        statusText.innerText = "البث جاهز، اضغط على زر التشغيل (Play) وسط الفيديو.";
                     });
                 });
 
                 hls.on(Hls.Events.ERROR, (event, data) => {
                     if (data.fatal) {
                         clearTimeout(safetyTimeout);
-                        activateFallback(); // تفعيل الجسر الآمن فوراً عند حدوث خطأ CORS
+                        activateFallback(); // التوجيه الفوري عند اكتشاف حظر حماية السيرفر الأصلي
                     }
                 });
             } 
-            // دعم أجهزة آيفون ومتصفح سفاري
+            // دعم متصفحات Apple (آيفون وسفاري)
             else if (video.canPlayType('application/vnd.apple.mpegurl')) {
                 video.src = streamSrc;
                 video.addEventListener('loadedmetadata', () => {
                     clearTimeout(safetyTimeout);
                     video.play();
-                    statusText.innerText = "🟢 يعمل الآن عبر نظام Apple.";
+                    statusText.innerText = "🟢 يعمل الآن بنظام تشغيل أبل.";
+                    statusText.style.color = "#4caf50";
                 });
                 video.addEventListener('error', () => {
                     clearTimeout(safetyTimeout);
                     activateFallback();
                 });
+            }
+        }
+
+        // دالة تكبير الشاشة للمشغل الداخلي
+        function goFullscreen() {
+            if (playerWrapper.requestFullscreen) {
+                playerWrapper.requestFullscreen();
+            } else if (playerWrapper.webkitRequestFullscreen) {
+                playerWrapper.webkitRequestFullscreen();
             }
         }
 
