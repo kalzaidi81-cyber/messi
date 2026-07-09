@@ -4,222 +4,51 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>البث المباشر | الأسطورة ليو ميسي</title>
-    
+    <!-- مكتبة مشغل الفيديو الاحترافية -->
+    <link href="https://vjs.zencdn.net/8.10.0/video-js.css" rel="stylesheet" />
     <style>
-        :root {
-            --primary: #e63946;
-            --gold: #f4a261;
-            --telegram: #0088cc;
-            --bg: #0a0a0a;
-            --card-bg: #141414;
-            --text-main: #ffffff;
-            --text-muted: #a0a0a0;
-        }
+        :root { --primary: #e63946; --gold: #f4a261; --bg: #050505; }
+        body { margin: 0; background-color: var(--bg); font-family: sans-serif; display: flex; flex-direction: column; align-items: center; min-height: 100vh; color: white; }
+        
+        .header { padding: 20px; text-align: center; }
+        .header h1 { margin: 0; font-size: 24px; color: var(--primary); text-shadow: 0 0 10px rgba(230,57,70,0.5); }
+        
+        .video-container { width: 95%; max-width: 900px; border-radius: 12px; overflow: hidden; border: 2px solid #333; box-shadow: 0 10px 30px rgba(0,0,0,0.8); }
+        .video-js { width: 100%; height: 500px; }
+        
+        .controls { margin-top: 20px; display: flex; gap: 15px; }
+        .btn { background: #222; color: white; border: 1px solid #444; padding: 12px 25px; border-radius: 8px; cursor: pointer; font-weight: bold; transition: 0.3s; }
+        .btn:hover { background: var(--primary); }
 
-        body {
-            margin: 0;
-            padding: 0;
-            background-color: var(--bg);
-            color: var(--text-main);
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            display: flex;
-            flex-direction: column;
-            min-height: 100vh;
-        }
-
-        .ambient-glow {
-            position: fixed;
-            top: 10%;
-            left: 50%;
-            transform: translateX(-50%);
-            width: 80vw;
-            height: 80vw;
-            max-width: 800px;
-            max-height: 800px;
-            background: radial-gradient(circle, rgba(230, 57, 70, 0.15) 0%, rgba(0,0,0,0) 60%);
-            z-index: 0;
-            pointer-events: none;
-        }
-
-        .header {
-            background: rgba(20, 20, 20, 0.85);
-            backdrop-filter: blur(10px);
-            padding: 15px;
-            text-align: center;
-            border-bottom: 2px solid var(--primary);
-            box-shadow: 0 4px 20px rgba(0,0,0,0.6);
-            z-index: 10;
-            position: relative;
-        }
-
-        .header h1 { margin: 0; font-size: 20px; font-weight: 800; }
-        .header span { color: var(--gold); }
-
-        .container {
-            max-width: 900px;
-            width: 95%;
-            margin: 20px auto;
-            text-align: center;
-            flex: 1;
-            z-index: 2;
-            position: relative;
-        }
-
-        .match-title {
-            display: inline-block;
-            background: linear-gradient(90deg, #1f1f1f, #2a2a2a, #1f1f1f);
-            padding: 8px 25px;
-            border-radius: 50px;
-            color: var(--gold);
-            font-weight: bold;
-            font-size: 16px;
-            margin-bottom: 20px;
-            border: 1px solid #333;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.5);
-            animation: pulse 2s infinite;
-        }
-
-        @keyframes pulse {
-            0% { box-shadow: 0 0 0 0 rgba(244, 162, 97, 0.4); }
-            70% { box-shadow: 0 0 0 10px rgba(244, 162, 97, 0); }
-            100% { box-shadow: 0 0 0 0 rgba(244, 162, 97, 0); }
-        }
-
-        /* --------------------------------------
-           إعدادات قص الصفحة (لإخفاء الهيدر الأبيض)
-        ----------------------------------------- */
-        .iframe-wrapper {
-            width: 100%;
-            height: 450px; /* ارتفاع المشغل للكمبيوتر */
-            background: #000;
-            border-radius: 16px;
-            overflow: hidden; /* يمنع ظهور أي شيء خارج هذا الصندوق */
-            box-shadow: 0 10px 40px rgba(0,0,0,0.9);
-            border: 1px solid #333;
-            position: relative;
-            margin-bottom: 20px;
-        }
-
-        .iframe-wrapper iframe {
-            position: absolute;
-            top: -320px; /* هذا الرقم يرفع الصفحة للأعلى لإخفاء القائمة البيضاء، يمكنك تغييره إذا احتجت */
-            left: 0;
-            width: 100%;
-            height: 900px; /* ارتفاع كبير لتعويض الرفع للأعلى */
-            border: none;
-        }
-
-        .btn {
-            background: linear-gradient(145deg, #222, #111);
-            color: #fff;
-            border: 1px solid #444;
-            padding: 12px 25px;
-            border-radius: 10px;
-            font-size: 15px;
-            font-weight: bold;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.5);
-            margin-bottom: 20px;
-        }
-
-        .btn:hover {
-            background: var(--primary);
-            border-color: var(--primary);
-            transform: translateY(-2px);
-        }
-
-        /* قسم تليجرام */
-        .telegram-section {
-            background: var(--card-bg);
-            border: 1px solid #2a2a2a;
-            border-radius: 16px;
-            padding: 20px;
-            max-width: 500px;
-            margin: 10px auto 20px auto;
-            box-shadow: 0 8px 30px rgba(0,0,0,0.6);
-        }
-
-        .channel-name {
-            font-size: 15px;
-            font-weight: bold;
-            margin-bottom: 15px;
-        }
-
-        .telegram-btn {
-            display: inline-flex;
-            align-items: center;
-            gap: 10px;
-            background: linear-gradient(135deg, #24A1DE, #1a8ac2);
-            color: white;
-            text-decoration: none;
-            padding: 10px 25px;
-            border-radius: 50px;
-            font-weight: bold;
-            font-size: 15px;
-            transition: all 0.3s ease;
-        }
-
-        .telegram-btn:hover {
-            transform: translateY(-2px) scale(1.02);
-            box-shadow: 0 8px 25px rgba(36, 161, 222, 0.5);
-        }
-
-        .telegram-icon { width: 20px; height: 20px; fill: white; }
-
-        .blessing-text {
-            font-size: 14px;
-            color: var(--text-muted);
-            margin-top: 15px;
-            font-weight: 500;
-        }
-
-        /* --------------------------------------
-           تعديلات شاشة الجوال
-        ----------------------------------------- */
-        @media (max-width: 768px) {
-            .iframe-wrapper {
-                height: 230px; /* تصغير ارتفاع الصندوق ليناسب شاشة الجوال */
-            }
-            .iframe-wrapper iframe {
-                top: -270px; /* تعديل مسافة القص للجوال */
-            }
-        }
+        .telegram-btn { margin-top: 30px; display: flex; align-items: center; gap: 10px; background: #24A1DE; padding: 12px 30px; border-radius: 50px; text-decoration: none; color: white; font-weight: bold; }
+        
+        @media (max-width: 768px) { .video-js { height: 300px; } }
     </style>
 </head>
 <body>
 
-    <div class="ambient-glow"></div>
-
     <div class="header">
-        <h1>🔥 البث المباشر حصرياً على <span>الأسطورة ليو ميسي</span> 🔥</h1>
+        <h1>🔥 البث المباشر | الأسطورة ليو ميسي 🔥</h1>
     </div>
 
-    <div class="container">
-        
-        <div class="match-title">⚽ بث مباشر: الأرجنتين ⚽</div>
-
-        <!-- حاوية البث المباشر مع خاصية القص -->
-        <div class="iframe-wrapper">
-            <iframe id="liveFrame" src="https://www.almodaraj.com/2026/07/blog-post_692.html?m=1" scrolling="no" allowfullscreen></iframe>
-        </div>
-        
-        <!-- زر تحديث -->
-        <button class="btn" onclick="document.getElementById('liveFrame').src += ''">🔄 تحديث المشغل</button>
-
-        <!-- قسم التليجرام -->
-        <div class="telegram-section">
-            <div class="channel-name">تغطية حصرية وأهداف المباراة لحظة بلحظة 👑</div>
-            <a href="https://t.me/messi_1" class="telegram-btn" target="_blank">
-                <svg class="telegram-icon" viewBox="0 0 24 24">
-                    <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm4.64 6.8c-.15 1.58-.8 5.42-1.13 7.19-.14.75-.42 1-.68 1.03-.58.05-1.02-.38-1.58-.75-.88-.58-1.38-.94-2.23-1.5-1-.65-.35-1 .22-1.62.15-.15 2.7-2.46 2.75-2.67.01-.03.01-.14-.06-.2-.07-.06-.17-.04-.25-.02-.11.02-1.83 1.16-5.17 3.42-.49.34-.93.5-1.33.49-.44-.01-1.29-.25-1.92-.45-.77-.25-1.39-.39-1.34-.83.03-.23.35-.46.97-.71 3.82-1.66 6.37-2.75 7.66-3.29 3.66-1.53 4.42-1.8 4.92-1.8.11 0 .35.03.51.16.13.11.17.26.19.37.02.07.03.22.01.28z"/>
-                </svg>
-                الأسطورة ليو ميسي @messi_1
-            </a>
-            
-            <div class="blessing-text">اللهم صل وسلم على نبينا</div>
-        </div>
+    <div class="video-container">
+        <video id="my-video" class="video-js vjs-big-play-centered" controls preload="auto" poster="https://i.imgur.com/8QzXk3N.png" data-setup='{}'>
+            <source src="https://cu.freshfin.site/mercaz1_360/index.m3u8" type="application/x-mpegURL" />
+            <p class="vjs-no-js">يرجى تحديث متصفحك لمشاهدة البث.</p>
+        </video>
     </div>
 
+    <div class="controls">
+        <button class="btn" onclick="location.reload()">🔄 تحديث البث</button>
+        <button class="btn" onclick="document.getElementById('my-video').requestFullscreen()">🖥️ شاشة كاملة</button>
+    </div>
+
+    <a href="https://t.me/messi_1" class="telegram-btn" target="_blank">انضم لقناتنا على التليجرام 👑</a>
+
+    <!-- سكربت المشغل -->
+    <script src="https://vjs.zencdn.net/8.10.0/video.min.js"></script>
+    <script>
+        var player = videojs('my-video');
+    </script>
 </body>
 </html>
