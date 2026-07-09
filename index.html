@@ -27,7 +27,6 @@
             min-height: 100vh;
         }
 
-        /* تأثير الإضاءة في الخلفية */
         .ambient-glow {
             position: fixed;
             top: 10%;
@@ -37,7 +36,7 @@
             height: 80vw;
             max-width: 800px;
             max-height: 800px;
-            background: radial-gradient(circle, rgba(230, 57, 70, 0.1) 0%, rgba(0,0,0,0) 60%);
+            background: radial-gradient(circle, rgba(230, 57, 70, 0.15) 0%, rgba(0,0,0,0) 60%);
             z-index: 0;
             pointer-events: none;
         }
@@ -53,13 +52,13 @@
             position: relative;
         }
 
-        .header h1 { margin: 0; font-size: 22px; font-weight: 800; }
+        .header h1 { margin: 0; font-size: 20px; font-weight: 800; }
         .header span { color: var(--gold); }
 
         .container {
-            max-width: 1000px;
+            max-width: 900px;
             width: 95%;
-            margin: 30px auto;
+            margin: 20px auto;
             text-align: center;
             flex: 1;
             z-index: 2;
@@ -73,7 +72,7 @@
             border-radius: 50px;
             color: var(--gold);
             font-weight: bold;
-            font-size: 18px;
+            font-size: 16px;
             margin-bottom: 20px;
             border: 1px solid #333;
             box-shadow: 0 4px 15px rgba(0,0,0,0.5);
@@ -86,24 +85,28 @@
             100% { box-shadow: 0 0 0 0 rgba(244, 162, 97, 0); }
         }
 
-        /* حاوية الأيفريم لمنع الأخطاء وضبط الحواف */
+        /* --------------------------------------
+           إعدادات قص الصفحة (لإخفاء الهيدر الأبيض)
+        ----------------------------------------- */
         .iframe-wrapper {
             width: 100%;
+            height: 450px; /* ارتفاع المشغل للكمبيوتر */
             background: #000;
             border-radius: 16px;
-            overflow: hidden;
+            overflow: hidden; /* يمنع ظهور أي شيء خارج هذا الصندوق */
             box-shadow: 0 10px 40px rgba(0,0,0,0.9);
             border: 1px solid #333;
             position: relative;
             margin-bottom: 20px;
         }
 
-        /* إخفاء شريط التمرير قدر الإمكان */
         .iframe-wrapper iframe {
-            display: block;
-            border: none;
+            position: absolute;
+            top: -320px; /* هذا الرقم يرفع الصفحة للأعلى لإخفاء القائمة البيضاء، يمكنك تغييره إذا احتجت */
+            left: 0;
             width: 100%;
-            height: 550px;
+            height: 900px; /* ارتفاع كبير لتعويض الرفع للأعلى */
+            border: none;
         }
 
         .btn {
@@ -112,7 +115,7 @@
             border: 1px solid #444;
             padding: 12px 25px;
             border-radius: 10px;
-            font-size: 16px;
+            font-size: 15px;
             font-weight: bold;
             cursor: pointer;
             transition: all 0.3s ease;
@@ -130,15 +133,15 @@
         .telegram-section {
             background: var(--card-bg);
             border: 1px solid #2a2a2a;
-            border-radius: 20px;
-            padding: 25px;
+            border-radius: 16px;
+            padding: 20px;
             max-width: 500px;
-            margin: 20px auto;
+            margin: 10px auto 20px auto;
             box-shadow: 0 8px 30px rgba(0,0,0,0.6);
         }
 
         .channel-name {
-            font-size: 17px;
+            font-size: 15px;
             font-weight: bold;
             margin-bottom: 15px;
         }
@@ -150,42 +153,36 @@
             background: linear-gradient(135deg, #24A1DE, #1a8ac2);
             color: white;
             text-decoration: none;
-            padding: 12px 30px;
+            padding: 10px 25px;
             border-radius: 50px;
             font-weight: bold;
-            font-size: 16px;
+            font-size: 15px;
             transition: all 0.3s ease;
-            box-shadow: 0 5px 20px rgba(36, 161, 222, 0.3);
         }
 
         .telegram-btn:hover {
-            transform: translateY(-3px) scale(1.02);
+            transform: translateY(-2px) scale(1.02);
             box-shadow: 0 8px 25px rgba(36, 161, 222, 0.5);
         }
 
-        .telegram-icon { width: 22px; height: 22px; fill: white; }
+        .telegram-icon { width: 20px; height: 20px; fill: white; }
 
         .blessing-text {
-            font-size: 16px;
+            font-size: 14px;
             color: var(--text-muted);
             margin-top: 15px;
             font-weight: 500;
         }
 
-        .footer {
-            text-align: center;
-            padding: 20px;
-            color: #555;
-            font-size: 14px;
-            border-top: 1px solid #222;
-            margin-top: auto;
-            z-index: 2;
-        }
-
-        /* تعديل الارتفاع في شاشات الجوال */
+        /* --------------------------------------
+           تعديلات شاشة الجوال
+        ----------------------------------------- */
         @media (max-width: 768px) {
+            .iframe-wrapper {
+                height: 230px; /* تصغير ارتفاع الصندوق ليناسب شاشة الجوال */
+            }
             .iframe-wrapper iframe {
-                height: 450px; /* أنسب للجوال */
+                top: -270px; /* تعديل مسافة القص للجوال */
             }
         }
     </style>
@@ -195,19 +192,19 @@
     <div class="ambient-glow"></div>
 
     <div class="header">
-        <h1>🔥 البث المباشر حصرياً على <span>قناتكم الأسطورة ليو ميسي</span> 🔥</h1>
+        <h1>🔥 البث المباشر حصرياً على <span>الأسطورة ليو ميسي</span> 🔥</h1>
     </div>
 
     <div class="container">
         
         <div class="match-title">⚽ بث مباشر: الأرجنتين ⚽</div>
 
-        <!-- حاوية البث المباشر -->
+        <!-- حاوية البث المباشر مع خاصية القص -->
         <div class="iframe-wrapper">
-            <iframe id="liveFrame" src="https://www.almodaraj.com/2026/07/blog-post_692.html?m=1" width="100%" height="550px" frameborder="0" scrolling="no" allowfullscreen></iframe>
+            <iframe id="liveFrame" src="https://www.almodaraj.com/2026/07/blog-post_692.html?m=1" scrolling="no" allowfullscreen></iframe>
         </div>
         
-        <!-- زر تحديث في حال علق البث عند المتابع -->
+        <!-- زر تحديث -->
         <button class="btn" onclick="document.getElementById('liveFrame').src += ''">🔄 تحديث المشغل</button>
 
         <!-- قسم التليجرام -->
@@ -222,10 +219,6 @@
             
             <div class="blessing-text">اللهم صل وسلم على نبينا</div>
         </div>
-    </div>
-
-    <div class="footer">
-        جميع الحقوق محفوظة &copy; 2026 - الأسطورة ليو ميسي
     </div>
 
 </body>
