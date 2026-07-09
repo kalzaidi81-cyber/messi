@@ -16,13 +16,13 @@
         .video-container { width: 95%; max-width: 900px; border-radius: 12px; overflow: hidden; border: 2px solid #333; box-shadow: 0 10px 30px rgba(0,0,0,0.8); }
         .video-js { width: 100%; height: 500px; }
         
-        .controls { margin-top: 20px; display: flex; gap: 15px; }
-        .btn { background: #222; color: white; border: 1px solid #444; padding: 12px 25px; border-radius: 8px; cursor: pointer; font-weight: bold; transition: 0.3s; }
+        .controls { margin-top: 20px; display: flex; gap: 15px; flex-wrap: wrap; justify-content: center; }
+        .btn { background: #222; color: white; border: 1px solid #444; padding: 12px 25px; border-radius: 8px; cursor: pointer; font-weight: bold; transition: 0.3s; font-size: 15px;}
         .btn:hover { background: var(--primary); }
 
-        .telegram-btn { margin-top: 30px; display: flex; align-items: center; gap: 10px; background: #24A1DE; padding: 12px 30px; border-radius: 50px; text-decoration: none; color: white; font-weight: bold; }
+        .telegram-btn { margin-top: 30px; display: flex; align-items: center; gap: 10px; background: #24A1DE; padding: 12px 30px; border-radius: 50px; text-decoration: none; color: white; font-weight: bold; margin-bottom: 20px;}
         
-        @media (max-width: 768px) { .video-js { height: 300px; } }
+        @media (max-width: 768px) { .video-js { height: 250px; } }
     </style>
 </head>
 <body>
@@ -32,7 +32,8 @@
     </div>
 
     <div class="video-container">
-        <video id="my-video" class="video-js vjs-big-play-centered" controls preload="auto" poster="https://i.imgur.com/8QzXk3N.png" data-setup='{}'>
+        <!-- أضفنا playsinline لضمان عمله بسلاسة على الآيفون والجوالات -->
+        <video id="my-video" class="video-js vjs-big-play-centered" controls preload="auto" playsinline data-setup='{}'>
             <source src="https://cu.freshfin.site/mercaz1_360/index.m3u8" type="application/x-mpegURL" />
             <p class="vjs-no-js">يرجى تحديث متصفحك لمشاهدة البث.</p>
         </video>
@@ -40,7 +41,7 @@
 
     <div class="controls">
         <button class="btn" onclick="location.reload()">🔄 تحديث البث</button>
-        <button class="btn" onclick="document.getElementById('my-video').requestFullscreen()">🖥️ شاشة كاملة</button>
+        <button class="btn" onclick="toggleFullScreen()">🖥️ شاشة كاملة</button>
     </div>
 
     <a href="https://t.me/messi_1" class="telegram-btn" target="_blank">انضم لقناتنا على التليجرام 👑</a>
@@ -48,7 +49,17 @@
     <!-- سكربت المشغل -->
     <script src="https://vjs.zencdn.net/8.10.0/video.min.js"></script>
     <script>
+        // تعريف المشغل
         var player = videojs('my-video');
+
+        // دالة الشاشة الكاملة الذكية
+        function toggleFullScreen() {
+            if (!player.isFullscreen()) {
+                player.requestFullscreen();
+            } else {
+                player.exitFullscreen();
+            }
+        }
     </script>
 </body>
 </html>
